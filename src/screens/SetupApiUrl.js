@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
 import { appColors, appSizes } from '../common';

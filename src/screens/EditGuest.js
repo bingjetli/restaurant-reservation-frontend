@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, Image, Keyboard, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
 import AppConfig from '../AppConfig';

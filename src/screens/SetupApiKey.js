@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import React, { useContext, useRef, useState } from 'react';
-import { Alert, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Alert, Keyboard, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppConfig from '../AppConfig';
 import { appColors } from '../common';
