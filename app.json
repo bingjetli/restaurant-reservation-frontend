@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "vu-reservation-frontend-app-expo",
+    "owner": "roboticjackdaw113",
+    "name": "Vu Restaurant Reservation Client",
     "slug": "vu-reservation-frontend-app-expo",
     "version": "1.0.0",
+    "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +14,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/25429aa5-f23d-44e1-8c32-ac0357102684"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -28,6 +31,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "25429aa5-f23d-44e1-8c32-ac0357102684"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
