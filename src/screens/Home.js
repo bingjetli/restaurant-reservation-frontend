@@ -102,7 +102,7 @@ export default function({route, navigation}){
                     <Text style={ss.headerLogoText} >Restaurant</Text>
                 </View>
 
-                {width > 600 ? <TouchableHighlight //magic-number
+                {/*width > 600 ? <TouchableHighlight //magic-number
                     style={global_styles.labeledIconButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
@@ -117,7 +117,7 @@ export default function({route, navigation}){
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={openSettings} >
                         <Image style={global_styles.iconButtonImage} source={SettingsIcon} />
-                </TouchableHighlight>}
+                </TouchableHighlight>*/}
 
             </View>
 
