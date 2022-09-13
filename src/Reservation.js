@@ -1,171 +1,31 @@
 import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
-import React, { useState } from 'react';
-import { Alert, Image, Modal, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, Image, Modal, Text, TouchableHighlight, View } from 'react-native';
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import MoreVertIcon from '../assets/icons/more_vert.png';
 import PersonIcon from '../assets/icons/person.png';
+import PersonFilledIcon from '../assets/icons/person_filled.png';
 import PersonOffIcon from '../assets/icons/person_off.png';
-import { appColors, appSizes, getTimeString, parse24HourTimeString } from './common';
-import getEnv from './env';
+import PersonOffFilledIcon from '../assets/icons/person_off_filled.png';
+import AppConfig from './AppConfig';
+import { appColors, getTimeString, parse24HourTimeString } from './common';
+import global_styles from './styles/global_styles';
+import reservation_styles from './styles/reservation_styles';
 import TagViewer from './TagViewer';
-
-const ss = StyleSheet.create({
-    mainView:{
-        marginBottom:5,
-        backgroundColor:appColors.iosSystemWhite.light,
-    },
-    headerView:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center',
-        //backgroundColor:'blue'
-    },
-    headerMainText:{
-        fontSize:appSizes.large.title3,
-        fontWeight:'bold',
-        textTransform:'capitalize',
-        color:appColors.mainText,
-        marginLeft:10,
-        //backgroundColor:'gray',
-    },
-    headerMainAlternateText:{
-        fontSize:appSizes.large.title3,
-        fontWeight:'bold',
-        color:appColors.iosSystemGray.light,
-        marginRight:10,
-    },
-    headerSecondaryText:{
-        fontSize:appSizes.large.body,
-        color:appColors.iosSystemGray.light,
-        marginHorizontal:10,
-    },
-    optionsPressable:{
-        minHeight:50,
-        minWidth:50,
-        borderRadius:25,
-        justifyContent:'center',
-        alignItems:'center',
-        //backgroundColor:'red',
-    },
-    optionsIcon:{
-        width:25,
-        height:25,
-        tintColor:appColors.main,
-    },
-    bodyView:{
-        marginTop:5,
-        flexDirection:'row',
-        flexWrap:'wrap',
-        marginHorizontal:10,
-    },
-    bodyNotesText:{
-        fontSize:appSizes.large.subhead,
-        color:appColors.iosSystemGray.light,
-    },
-    footerView:{
-        flex:1, //fill all available space
-        flexDirection:'row',
-    },
-    footerPressable:{
-        minHeight:50,
-        minWidth:50,
-        flexDirection:'row',
-        alignItems:'center',
-        paddingHorizontal:10,
-        //backgroundColor:'red',
-    },
-    footerIcon:{
-        height:25,
-        width:25,
-        tintColor:appColors.main,
-    },
-    footerAbsentSelectedIcon:{
-        height:25,
-        width:25,
-        tintColor:appColors.iosSystemOrange.light,
-    },
-    footerPresentSelectedIcon:{
-        height:25,
-        width:25,
-        tintColor:appColors.iosSystemGreen.light,
-    },
-    footerText:{
-        color:appColors.main,
-        fontSize:appSizes.large.body,
-        marginLeft:5,
-    },
-    footerSelectedPresentText:{
-        color:appColors.main,
-        marginLeft:5,
-        fontWeight:'bold',
-        color:appColors.iosSystemGreen.light,
-        fontSize:appSizes.large.body,
-    },
-    footerSelectedAbsentText:{
-        color:appColors.main,
-        marginLeft:5,
-        fontWeight:'bold',
-        color:appColors.iosSystemOrange.light,
-        fontSize:appSizes.large.body,
-    },
-    optionsSheetModalView:{
-        backgroundColor:appColors.iosSystemBlack.light + '44',
-        flex:1,
-        alignItems:'center'
-    },
-    optionsSheetView:{
-        backgroundColor:appColors.iosSystemWhite.light,
-        position:'absolute',
-        bottom:110,
-        minWidth:400,
-        alignItems:'center',
-        borderRadius:10,
-    },
-    optionsSheetHeaderView:{
-        width:400,
-        flexDirection:'row',
-        justifyContent:'space-evenly',
-        paddingVertical:10,
-    },
-    optionsSheetPressable:{
-        minHeight:50,
-        justifyContent:'center',
-        width:'100%',
-    },
-    optionsSheetText:{
-        fontSize:appSizes.large.body,
-        textAlign:'center',
-        color:appColors.main,
-    },
-    optionsSheetCancelPressable:{
-        position:'absolute',
-        bottom:50,
-        backgroundColor:appColors.iosSystemWhite.light,
-        minHeight:50,
-        minWidth:400,
-        borderRadius:10,
-        justifyContent:'center',
-    },
-    optionsSheetCancelText:{
-        fontSize:appSizes.large.body,
-        textAlign:'center',
-        color:appColors.main,
-        margin:10,
-    },
-    divider:{
-        width:'100%',
-        height:2,
-        backgroundColor:appColors.iosSystemGray5.light,
-    },
-});
 
 export default function({item}){
     const navigation = useNavigation(); //hook to retreive navigation prop from nested component
+    const [s_config, setConfigState] = useContext(AppConfig);
 
     //states
     const [s_status, setStatusState] = useState(item.status);
     const [s_show_options, setShowOptionsState] = useState(false);
+
+    //side-effects
+    useEffect(() => { //run this on init and everytime item changes
+        setStatusState(item.status); //use this to synchronize the status state
+    }, [item]);
 
     //event-handlers
     function markStatusForReservation(proposed_status){
@@ -182,10 +42,10 @@ export default function({item}){
             id:item._id,
             status:status,
         };
-        const url = getEnv().API_URL + '/reservations';
+        const url = s_config.env.API_URL + '/reservations';
 
         const headers = {};
-        headers[getEnv().API_KEY_HEADER_NAME] = getEnv().API_KEY;
+        headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
 
         Axios.put(url, payload, {headers:headers}).then(r => {
             if(r.data.result === 'successful'){
@@ -222,15 +82,14 @@ export default function({item}){
         });
     }
 
-    function editNames(){
+    function editName(){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-firstname',
+            name:'edit-name',
             params:{
                 id:item._id,
-                firstName:item.firstName,
-                lastName:item.lastName,
+                name:item.name,
             },
         });
     }
@@ -283,10 +142,10 @@ export default function({item}){
                     text:'Delete Permanently',
                     onPress:() => {
                         //delete logic
-                        const url = getEnv().API_URL + '/reservations';
+                        const url = s_config.env.API_URL + '/reservations';
 
                         const headers = {};
-                        headers[getEnv().API_KEY_HEADER_NAME] = getEnv().API_KEY;
+                        headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
 
                         const payload = {
                             ids:[item._id],
@@ -306,161 +165,162 @@ export default function({item}){
             ]);
     }
 
-    return (<View style={ss.mainView} >
+
+    return (<View style={reservation_styles.reservationMainView} >
         <Modal 
             visible={s_show_options} 
             animationType='fade' 
             transparent={true}
             onRequestClose={() => setShowOptionsState(false)}>
-            <View style={ss.optionsSheetModalView} onStartShouldSetResponder={() => setShowOptionsState(false)}>
-                <Animated.View style={ss.optionsSheetView} entering={FadeInDown} exiting={FadeOutDown}>
-                    <View style={ss.optionsSheetHeaderView}>
-                        <View>
-                            <Text style={ss.headerMainText}>{item.firstName} {item.lastName}</Text>
-                            <Text style={ss.headerSecondaryText}>{item.phoneNumber}</Text>
-                        </View>
-                        <View>
-                            <Text style={ss.headerMainAlternateText}>{getTimeString(parse24HourTimeString(item.time), true)}</Text>
-                            <Text style={ss.headerSecondaryText}>{item.seats} Guests</Text>
-                        </View>
-                    </View>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={reschedule}>
-                        <Text style={ss.optionsSheetText} >Reschedule Date/Time</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={editGuests}>
-                        <Text style={ss.optionsSheetText} >Change Amount Of Guests</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={editNames}>
-                        <Text style={ss.optionsSheetText} >Change Names</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={editPhoneNumber}>
-                        <Text style={ss.optionsSheetText} >Change Phone Number</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={editTags}>
-                        <Text style={ss.optionsSheetText} >Change Tags</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={editNotes}>
-                        <Text style={ss.optionsSheetText} >Edit Notes</Text>
-                    </TouchableHighlight>
-                    <View style={ss.divider} />
-
-                    <TouchableHighlight 
-                        style={ss.optionsSheetPressable} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
-                        onPress={deleteReservation}>
-                        <Text style={[ss.optionsSheetText, {color:appColors.iosSystemRed.light}]} >Delete</Text>
-                    </TouchableHighlight>
-                </Animated.View>
+            <View style={global_styles.actionSheetModalView} onStartShouldSetResponder={() => setShowOptionsState(false)}>
                 <TouchableHighlight 
-                    style={ss.optionsSheetCancelPressable} 
+                    style={global_styles.actionSheetCancelButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={() => setShowOptionsState(false)}>
-                    <Text style={ss.optionsSheetCancelText}>Cancel</Text>
+                    <Text style={global_styles.secondaryButtonText}>Cancel</Text>
                 </TouchableHighlight>
+                <Animated.View style={global_styles.actionSheetContentView} entering={FadeInDown} exiting={FadeOutDown}>
+                    <View style={[global_styles.horizontalView, {marginVertical:10}]}>
+                        <View style={{flex:1, alignItems:'flex-end'}}>
+                            <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText, {marginRight:5}]}>{item.name}</Text>
+                            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText, {marginRight:5}]}>{getTimeString(parse24HourTimeString(item.time), true)}</Text>
+                        </View>
+                        <View style={{flex:1}}>
+                            <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText, {textTransform:'uppercase', marginLeft:5}]}>{item.phoneNumber}</Text>
+                            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText, {marginLeft:5}]}>{item.seats} Guests</Text>
+                        </View>
+                    </View>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={reschedule}>
+                        <Text style={global_styles.secondaryButtonText} >Reschedule Date/Time</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={editGuests}>
+                        <Text style={global_styles.secondaryButtonText} >Change Group Size</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={editName}>
+                        <Text style={global_styles.secondaryButtonText} >Change Name</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={editPhoneNumber}>
+                        <Text style={global_styles.secondaryButtonText} >Change Phone Number</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={editTags}>
+                        <Text style={global_styles.secondaryButtonText} >Change Tags</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={editNotes}>
+                        <Text style={global_styles.secondaryButtonText} >Edit Notes</Text>
+                    </TouchableHighlight>
+                    <View style={global_styles.actionSheetContentDivider} />
+
+                    <TouchableHighlight 
+                        style={global_styles.actionSheetContentButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.iosSystemGray5.light}
+                        onPress={deleteReservation}>
+                        <Text style={[global_styles.secondaryButtonText, {color:appColors.iosSystemRed.light}]} >Delete</Text>
+                    </TouchableHighlight>
+                </Animated.View>
             </View>
         </Modal>
-        <View style={ss.headerView}>
-            <Text style={ss.headerMainText} >{item.firstName} {item.lastName}</Text>
+        <View style={reservation_styles.reservationHeaderView}>
+            <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText]} >{item.name}</Text>
             <TouchableHighlight 
-                style={ss.optionsPressable} 
+                style={global_styles.iconButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={() => setShowOptionsState(true)}>
-                <Image style={ss.optionsIcon} source={MoreVertIcon} />
+                <Image style={global_styles.iconButtonImage} source={MoreVertIcon} />
             </TouchableHighlight>
         </View>
-        <View style={ss.headerView}>
-            <Text style={ss.headerSecondaryText} >{item.phoneNumber}</Text>
-            <Text style={ss.headerSecondaryText} >{item.seats} Guests</Text>
+        <View style={reservation_styles.reservationHeaderView}>
+            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.phoneNumber}</Text>
+            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.seats} Guests</Text>
         </View>
 
-        <View style={ss.bodyView}>
+        <View style={reservation_styles.reservationBodyView}>
             {item.tags && <TagViewer tags={item.tags} />}
         </View>
-        <View style={ss.bodyView}>
-            {item.notes && <Text style={ss.bodyNotesText} >“{item.notes}”</Text>}
+        <View style={reservation_styles.reservationBodyView}>
+            {item.notes && <Text style={[global_styles.bodyCaption, reservation_styles.reservationNotesText]} >&ldquo;{item.notes}&rdquo;</Text>}
         </View>
 
-        <View style={ss.footerView}>
+        <View style={[global_styles.horizontalView, {justifyContent:'flex-start'}]}>
             {s_status === 'present' ? 
                 <TouchableHighlight 
-                    style={ss.footerPressable} 
+                    style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={() => markStatusForReservation('present')} >
                     <>
-                        <Image style={ss.footerPresentSelectedIcon} source={PersonIcon} />
-                        <Text style={ss.footerSelectedPresentText} >Present</Text>
+                        <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={PersonFilledIcon} />
+                        <Text style={[global_styles.secondaryButtonText, reservation_styles.presentButtonSelectedText]} >Present</Text>
                     </>
                 </TouchableHighlight> :
                 <TouchableHighlight 
-                    style={ss.footerPressable} 
+                    style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={() => markStatusForReservation('present')} >
                     <>
-                        <Image style={ss.footerIcon} source={PersonIcon} />
-                        <Text style={ss.footerText} >Present</Text>
+                        <Image style={global_styles.iconButtonImage} source={PersonIcon} />
+                        <Text style={[global_styles.secondaryButtonText]} >Present</Text>
                     </>
                 </TouchableHighlight>}
 
             {s_status === 'absent' ? 
                 <TouchableHighlight 
-                    style={ss.footerPressable} 
+                    style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={() => markStatusForReservation('absent')}>
                     <>
-                        <Image style={ss.footerAbsentSelectedIcon} source={PersonOffIcon} />
-                        <Text style={ss.footerSelectedAbsentText} >Absent</Text>
+                        <Image style={[global_styles.iconButtonImage, reservation_styles.absentButtonSelected]} source={PersonOffFilledIcon} />
+                        <Text style={[global_styles.secondaryButtonText, reservation_styles.absentButtonSelectedText]} >Absent</Text>
                     </>
                 </TouchableHighlight> :
                 <TouchableHighlight 
-                    style={ss.footerPressable} 
+                    style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
                     underlayColor={appColors.iosSystemGray5.light}
                     onPress={() => markStatusForReservation('absent')}>
                     <>
-                        <Image style={ss.footerIcon} source={PersonOffIcon} />
-                        <Text style={ss.footerText} >Absent</Text>
+                        <Image style={global_styles.iconButtonImage} source={PersonOffIcon} />
+                        <Text style={global_styles.secondaryButtonText} >Absent</Text>
                     </>
                 </TouchableHighlight>}
         </View>

@@ -1,95 +1,11 @@
 import React, { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import { appColors, appSizes } from '../common';
+import { appColors } from '../common';
 import GuestPicker from '../GuestPicker';
-
-const ss = StyleSheet.create({
-    mainView:{
-        flex:1, //take up as much space as possible
-        backgroundColor:appColors.iosSystemWhite.light,
-    },
-    headerView:{
-        backgroundColor:appColors.iosSystemWhite.light,
-        flexDirection:'row',
-        alignItems:'center',
-    },
-    headerText:{
-        color:appColors.mainText,
-        fontSize:appSizes.large.title3,
-        fontWeight:'bold',
-        flex:2,
-        textAlignVertical:'center',
-        textAlign:'center',
-    },
-    headerBackPressable:{
-        flex:1,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-        minHeight:50,
-    },
-    headerBackText:{
-        color:appColors.main,
-        fontWeight:'bold',
-        fontSize:appSizes.large.title3,
-        marginRight:10,
-    },
-    headerBackIcon:{
-        height:25,
-        width:25,
-        marginLeft:10,
-        tintColor:appColors.main,
-    },
-    bodyView:{
-        flex:1,
-    },
-    bodyContent:{
-        paddingTop:'25%',
-        alignItems:'center',
-        justifyContent:'center',
-    },
-    bodyText:{
-        color:appColors.iosSystemGray.light,
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        margin:10,
-        maxWidth:400,
-    },
-    bodyTitleText:{
-        color:appColors.mainText,
-        fontSize:appSizes.large.title1,
-        fontWeight:'bold',
-        textAlign:'center',
-        margin:10,
-        maxWidth:400,
-    },
-    footerView:{
-    },
-    footerNextPressable:{
-        backgroundColor:appColors.main,
-        margin:10,
-        minHeight:50,
-        justifyContent:'center',
-    },
-    footerNextText:{
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        color:appColors.iosSystemWhite.light,
-    },
-    footerBackPressable:{
-        minHeight:50,
-        justifyContent:'center',
-        marginHorizontal:10,
-        marginBottom:10,
-    },
-    footerBackText:{
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        color:appColors.main,
-    },
-});
+import setup_styles from '../styles/setup_styles';
+import global_styles from '../styles/global_styles';
 
 export default function({route, navigation}){
     //state
@@ -105,7 +21,7 @@ export default function({route, navigation}){
         params.seats = s_guests;
 
         navigation.navigate({
-            name:'create-firstname',
+            name:'create-name',
             params:params,
         });
     }
@@ -115,40 +31,40 @@ export default function({route, navigation}){
     }
 
 
-    return (<SafeAreaView style={ss.mainView}>
-        <View style={ss.headerView}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+        <View style={global_styles.headerView}>
             <TouchableHighlight 
-                style={ss.headerBackPressable} 
+                style={global_styles.headerBackButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={returnToHomeScreen} >
                 <>
-                    <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
-                    <Text style={ss.headerBackText} >Cancel</Text>
+                    <Image style={global_styles.headerBackButtonIcon} source={ArrowBackIosIcon} />
+                    <Text style={global_styles.headerBackButtonText} >Cancel</Text>
                 </>
             </TouchableHighlight>
-            <Text style={ss.headerText}>Add Reservation</Text>
+            <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <ScrollView style={ss.bodyView} contentContainerStyle={ss.bodyContent}>
-            <Text style={ss.bodyTitleText} >Number Of Guests</Text>
-            <Text style={ss.bodyText} >Then, let's specify how many guests will be expected for this Reservation.</Text>
+        <ScrollView style={[global_styles.fullView, setup_styles.bodyView]} contentContainerStyle={global_styles.fullCenteringView}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Group Size</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Then, let's specify how many guests will be expected to arrive for this Reservation.</Text>
             <GuestPicker guests={s_guests} onUpdate={next => setGuestsState(next)} />
         </ScrollView>
-        <View style={ss.footerView}>
+        <View style={setup_styles.footerView}>
             <TouchableHighlight 
-                style={ss.footerNextPressable} 
+                style={global_styles.primaryButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.mainComplementary1}
                 onPress={goToNextScreen}>
-                <Text style={ss.footerNextText}>Continue</Text>
+                <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>
             <TouchableHighlight 
-                style={ss.footerBackPressable} 
+                style={global_styles.secondaryButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={goToPreviousScreen}>
-                <Text style={ss.footerBackText}>Go Back</Text>
+                <Text style={global_styles.secondaryButtonText}>Go Back</Text>
             </TouchableHighlight>
         </View>
     </SafeAreaView>);

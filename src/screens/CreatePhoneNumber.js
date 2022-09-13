@@ -1,128 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Pressable, Image, StyleSheet, Text, TextInput, View, TouchableHighlight } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Image, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { appColors, appSizes } from '../common';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-
-const ss = StyleSheet.create({
-    mainView:{
-        flex:1, //take up as much space as possible
-        backgroundColor:appColors.iosSystemWhite.light,
-    },
-    headerView:{
-        backgroundColor:appColors.iosSystemWhite.light,
-        flexDirection:'row',
-        alignItems:'center',
-    },
-    headerText:{
-        color:appColors.mainText,
-        fontSize:appSizes.large.title3,
-        fontWeight:'bold',
-        flex:2,
-        textAlignVertical:'center',
-        textAlign:'center',
-    },
-    headerBackPressable:{
-        flex:1,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-        minHeight:50,
-    },
-    headerBackText:{
-        color:appColors.main,
-        fontWeight:'bold',
-        fontSize:appSizes.large.title3,
-        marginRight:10,
-    },
-    headerBackIcon:{
-        height:25,
-        width:25,
-        marginLeft:10,
-        tintColor:appColors.main,
-    },
-    bodyView:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center',
-    },
-    bodyText:{
-        color:appColors.iosSystemGray.light,
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        margin:10,
-        maxWidth:400,
-    },
-    bodyTitleText:{
-        color:appColors.mainText,
-        fontSize:appSizes.large.title1,
-        fontWeight:'bold',
-        textAlign:'center',
-        margin:10,
-        maxWidth:400,
-    },
-    footerView:{
-    },
-    footerNextPressable:{
-        backgroundColor:appColors.main,
-        margin:10,
-        minHeight:50,
-        justifyContent:'center',
-    },
-    footerNextDisabledPressable:{
-        backgroundColor:appColors.iosSystemGray.light,
-        margin:10,
-        minHeight:50,
-        justifyContent:'center',
-    },
-    footerNextText:{
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        color:appColors.iosSystemWhite.light,
-    },
-    footerBackPressable:{
-        minHeight:50,
-        justifyContent:'center',
-        marginHorizontal:10,
-        marginBottom:10,
-    },
-    footerBackText:{
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        color:appColors.main,
-    },
-    bodyTextInputPressable:{
-        maxWidth:300,
-        minWidth:300,
-        minHeight:50,
-        maxHeight:50,
-        //backgroundColor:appColors.iosSystemGray6.light,
-        borderRadius:15,
-        borderColor:appColors.main,
-        borderWidth:1,
-        borderStyle:'solid',
-        marginTop:10,
-        flexDirection:'row',
-        justifyContent:'center',
-    },
-    bodyTextInputAlt:{
-        color:appColors.main,
-        fontSize:appSizes.large.title1,
-        // borderColor:'blue',
-        // borderWidth:1,
-        // borderStyle:'solid',
-    },
-    bodyTextInput:{
-        color:appColors.main,
-        fontSize:appSizes.large.title1,
-        textAlign:'center',
-        // borderColor:'red',
-        // borderWidth:1,
-        // borderStyle:'solid',
-        minWidth:70,
-        maxWidth:70,
-    },
-});
+import { appColors } from '../common';
+import setup_styles from '../styles/setup_styles';
+import global_styles from '../styles/global_styles';
+import phone_number_styles from '../styles/phone_number_styles';
 
 export default function({route, navigation}){
     //state
@@ -194,28 +77,28 @@ export default function({route, navigation}){
         else r_line_number_textbox.current.focus();
     }
 
-    return (<SafeAreaView style={ss.mainView}>
-        <View style={ss.headerView}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+        <View style={global_styles.headerView}>
             <TouchableHighlight 
-                style={ss.headerBackPressable} 
+                style={global_styles.headerBackButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={returnToHomeScreen} >
                 <>
-                    <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
-                    <Text style={ss.headerBackText} >Cancel</Text>
+                    <Image style={global_styles.headerBackButtonIcon} source={ArrowBackIosIcon} />
+                    <Text style={global_styles.headerBackButtonText} >Cancel</Text>
                 </>
             </TouchableHighlight>
-            <Text style={ss.headerText}>Add Reservation</Text>
+            <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <View style={ss.bodyView}>
-            <Text style={ss.bodyTitleText} >Phone Number</Text>
-            <Text style={ss.bodyText} >Almost done! Please enter a contact number for this Reservation.</Text>
-            <Pressable style={ss.bodyTextInputPressable} onPress={decideWhichTextBoxToFocus}>
-                <Text style={ss.bodyTextInputAlt} >(</Text>
+        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Phone Number</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Almost done! Please enter a contact number for this Reservation.</Text>
+            <View style={phone_number_styles.falseTextBox}>
+                <Text style={phone_number_styles.falseTextBoxText} >(</Text>
                 <TextInput 
-                    style={ss.bodyTextInput}
+                    style={[phone_number_styles.invisibleTextBox, {minWidth:40}]}
                     value={s_area_code}
                     maxLength={3}
                     keyboardType='number-pad'
@@ -223,9 +106,9 @@ export default function({route, navigation}){
                     onKeyPress={areaCodeKeyPress}
                     onPressIn={() => setAreaCodeState('')}
                     ref={r_area_code_textbox} />
-                <Text style={ss.bodyTextInputAlt} >)</Text>
+                <Text style={phone_number_styles.falseTextBoxText} >)</Text>
                 <TextInput 
-                    style={ss.bodyTextInput}
+                    style={[phone_number_styles.invisibleTextBox, {minWidth:40}]}
                     value={s_prefix}
                     maxLength={3}
                     keyboardType='number-pad'
@@ -234,9 +117,9 @@ export default function({route, navigation}){
                     onKeyPress={prefixKeyPress}
                     onPressIn={() => setPrefixState('')}
                     ref={r_prefix_textbox} />
-                <Text style={ss.bodyTextInputAlt} >- </Text>
+                <Text style={phone_number_styles.falseTextBoxText} >&ndash;</Text>
                 <TextInput 
-                    style={ss.bodyTextInput}
+                    style={[phone_number_styles.invisibleTextBox, {minWidth:50}]}
                     value={s_line_number}
                     maxLength={4}
                     keyboardType='number-pad'
@@ -244,23 +127,23 @@ export default function({route, navigation}){
                     onKeyPress={lineNumberKeyPress}
                     onPressIn={() => setLineNumberState('')}
                     ref={r_line_number_textbox} />
-            </Pressable>
+            </View>
         </View>
-        <View style={ss.footerView}>
+        <View style={setup_styles.footerView}>
             <TouchableHighlight 
-                style={s_area_code.length === 3 && s_prefix.length === 3 && s_line_number.length === 4 ? ss.footerNextPressable : ss.footerNextDisabledPressable} 
+                style={s_area_code.length === 3 && s_prefix.length === 3 && s_line_number.length === 4 ? global_styles.primaryButton : global_styles.primaryButtonDisabled} 
                 activeOpacity={0.6}
                 underlayColor={appColors.mainComplementary1}
                 onPress={goToNextScreen} 
                 disabled={!(s_area_code.length === 3 && s_prefix.length === 3 && s_line_number.length === 4)}>
-                <Text style={ss.footerNextText}>Continue</Text>
+                <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>
             <TouchableHighlight 
-                style={ss.footerBackPressable} 
+                style={global_styles.secondaryButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={goToPreviousScreen}>
-                <Text style={ss.footerBackText}>Go Back</Text>
+                <Text style={global_styles.secondaryButtonText}>Go Back</Text>
             </TouchableHighlight>
         </View>
     </SafeAreaView>);

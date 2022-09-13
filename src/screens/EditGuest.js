@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Pressable, Image, ScrollView, StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native';
+import Axios from 'axios';
+import React, { useContext, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
+import AppConfig from '../AppConfig';
 import { appColors, appSizes } from '../common';
 import GuestPicker from '../GuestPicker';
-import getEnv from '../env';
-import Axios from 'axios';
+import global_styles from '../styles/global_styles';
+import setup_styles from '../styles/setup_styles';
 
 const ss = StyleSheet.create({
     mainView:{
@@ -94,6 +96,8 @@ const ss = StyleSheet.create({
 });
 
 export default function({route, navigation}){
+    const [s_config, setConfigState] = useContext(AppConfig);
+
     //state
     const [s_guests, setGuestsState] = useState(route.params.seats);
 
@@ -104,10 +108,10 @@ export default function({route, navigation}){
 
     function goToNextScreen(){
         //perform the update request on the backend
-        const url = getEnv().API_URL + '/reservations';
+        const url = s_config.env.API_URL + '/reservations';
 
         const headers = {};
-        headers[getEnv().API_KEY_HEADER_NAME] = getEnv().API_KEY;
+        headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
 
         const payload = {...route.params};
         payload.seats = s_guests;
@@ -124,33 +128,33 @@ export default function({route, navigation}){
         });
     }
 
-    return (<SafeAreaView style={ss.mainView}>
-        <View style={ss.headerView}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+        <View style={global_styles.headerView}>
             <TouchableHighlight 
-                style={ss.headerBackPressable} 
+                style={global_styles.headerBackButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={returnToHomeScreen} >
                 <>
-                <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
-                <Text style={ss.headerBackText} >Cancel</Text>
+                <Image style={global_styles.headerBackButtonIcon} source={ArrowBackIosIcon} />
+                <Text style={global_styles.headerBackButtonText} >Cancel</Text>
                 </>
             </TouchableHighlight>
-            <Text style={ss.headerText}>Change Number of Guests</Text>
+            <Text style={global_styles.headerText}>Change Group Size</Text>
             <View style={{flex:1}}></View>
         </View>
-        <ScrollView style={ss.bodyView} contentContainerStyle={ss.bodyContent}>
-            <Text style={ss.bodyTitleText} >Number Of Guests</Text>
-            <Text style={ss.bodyText} >Please choose the amount of Guests to change to.</Text>
+        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Group Size</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >You may change the amount of guests expected to arrive for this Reservation.</Text>
             <GuestPicker guests={s_guests} onUpdate={next => setGuestsState(next)} />
-        </ScrollView>
-        <View style={ss.footerView}>
+        </View>
+        <View style={setup_styles.footerView}>
             <TouchableHighlight 
-                style={ss.footerNextPressable} 
+                style={global_styles.primaryButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.mainComplementary1}
                 onPress={goToNextScreen}>
-                <Text style={ss.footerNextText}>Change Number of Guests</Text>
+                <Text style={global_styles.primaryButtonText}>Change Group Size</Text>
             </TouchableHighlight>
         </View>
     </SafeAreaView>);

@@ -12,6 +12,8 @@ import UndefinedIcon from '../assets/icons/tag_icons/undefined.png';
 import VeganIcon from '../assets/icons/tag_icons/vegan.png';
 import VegetarianIcon from '../assets/icons/tag_icons/vegetarian.png';
 import WindowSeatIcon from '../assets/icons/tag_icons/window_seat.png';
+import global_styles from './styles/global_styles';
+import tag_styles from './styles/tag_styles';
 
 
 const ss = StyleSheet.create({
@@ -70,8 +72,8 @@ function getTagIcon(tag_name){
 
 export default function({data, selected, onSelect}){
 
-    return(<Pressable style={selected ? ss.mainSelectedPressable : ss.mainPressable} onPress={() => onSelect(data.name)}>
+    return(<Pressable style={selected ? tag_styles.pickerButtonSelected : tag_styles.pickerButton} onPress={() => onSelect(data.name)}>
         {/*<Image style={[ss.mainIcon, {tintColor:data.color}]} source={getTagIcon(data.name)} />*/}
-        <Text style={selected ? ss.mainSelectedText: ss.mainText}>{data.name}</Text>
+        <Text style={selected ? [global_styles.secondaryButtonText, tag_styles.pickerButtonSelectedText] : [global_styles.secondaryButtonText, tag_styles.pickerButtonText]}>{data.name}</Text>
     </Pressable>);
 }

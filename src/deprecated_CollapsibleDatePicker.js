@@ -1,16 +1,16 @@
 import Axios from 'axios';
-import { addDays, addMonths, addYears, eachDayOfInterval, endOfMonth, endOfWeek, format, formatISO, getDate, getMonth, startOfMonth, startOfWeek, subDays, subMonths, subYears } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import { addMonths, addYears, eachDayOfInterval, endOfMonth, endOfWeek, format, formatISO, getDate, getMonth, startOfMonth, startOfWeek, subMonths, subYears } from 'date-fns';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { FadeInUp, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import ChevronLeftIcon from '../assets/icons/chevron_left.png';
 import ChevronRightIcon from '../assets/icons/chevron_right.png';
 import ExpandIcon from '../assets/icons/expand.png';
 import GroupIcon from '../assets/icons/group.png';
 import TodayIcon from '../assets/icons/today.png';
+import AppConfig from './AppConfig';
 import { appColors, appSizes } from './common';
-import getEnv from './env';
 
 const ss = StyleSheet.create({
     mainView:{
@@ -159,10 +159,10 @@ const ss = StyleSheet.create({
     },
 });
 
-export default function CollapsibleDatePicker({date, onSelect, showPicker, onTogglePicker}){
+export default function CollapsibleDatePicker({date, onSelect, showPicker, onTogglePicker, startExpanded}){
+    const [s_config, setConfigState] = useContext(AppConfig);
 
     //state
-    //const [s_show_picker, setShowPickerState] = useState(startExpanded ? true : false);
     const [s_total_guests_per_day, setTotalGuestsPerDayState] = useState({});
 
     //cached
@@ -213,6 +213,13 @@ export default function CollapsibleDatePicker({date, onSelect, showPicker, onTog
         });
     }, [date, s_total_guests_per_day]);
 
+    //side-effects
+    useEffect(() => { //run this once on init
+        if(startExpanded){
+            fetchReservationData();
+        }
+    }, []);
+
     //event-handlers
     function togglePicker(){
         if(onTogglePicker !== undefined){
@@ -229,9 +236,9 @@ export default function CollapsibleDatePicker({date, onSelect, showPicker, onTog
     }
 
     function fetchReservationData(reference_date=date){
-        const url = getEnv().API_URL + '/reservations?startDate=' + formatISO(startOfMonth(reference_date), {representation:'date'}) + '&endDate=' + formatISO(endOfMonth(reference_date), {representation:'date'});
+        const url = s_config.env.API_URL + '/reservations?startDate=' + formatISO(startOfMonth(reference_date), {representation:'date'}) + '&endDate=' + formatISO(endOfMonth(reference_date), {representation:'date'});
         const headers = {};
-        headers[getEnv().API_KEY_HEADER_NAME] = getEnv().API_KEY;
+        headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
 
         Axios.get(url, {headers:headers}).then(r => {
             if(r.data.result === 'successful'){
@@ -336,9 +343,15 @@ export default function CollapsibleDatePicker({date, onSelect, showPicker, onTog
                 nextMonth();
             }
             else{
+                //interpolate component back to normal, if swipe gesture isn't fully detected
                 sv_calendar_opacity.value = withTiming(1, {duration:250});
                 sv_calendar_xoffset.value = withTiming(0, {duration:250});
             }
+        }
+        else{
+            //interpolate component back to normal, if swipe gesture isn't fully detected
+            sv_calendar_opacity.value = withTiming(1, {duration:250});
+            sv_calendar_xoffset.value = withTiming(0, {duration:250});
         }
     });
 

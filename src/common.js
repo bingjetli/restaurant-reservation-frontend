@@ -14,6 +14,13 @@ export const appColors = {
     secondaryText2:'#aaaaaa',
     mainTextInvert:'#F8F8FF',
 
+    text:'#647381',
+    text2:'#7e8c9b',
+    text3:'#9ba6b1',
+    text4:'#b7bfc7',
+    text5:'#d4d9de',
+    text5:'#f1f2f4',
+
     iosSystemWhite:{
         light:'#fafaff',
         dark:'#101012',
@@ -21,6 +28,10 @@ export const appColors = {
     iosSystemBlack:{
         light:'#101012',
         dark:'#fafaff',
+    },
+    iosSystemGray0:{
+        light:'#636366',
+        dark:'#aeaeb2',
     },
     iosSystemGray:{
         light:'#8e8e93',

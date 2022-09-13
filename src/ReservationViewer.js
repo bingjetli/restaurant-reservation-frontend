@@ -1,48 +1,17 @@
-import { formatISO } from 'date-fns';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, PanResponder, StyleSheet, Text, View } from 'react-native';
-import AppConfig from './AppConfig';
-import getEnv from './env';
 import Axios from 'axios';
-import Reservation from './Reservation';
-import { appColors, appSizes, getTimeString, parse24HourTimeString } from './common';
+import { formatISO } from 'date-fns';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Alert, Text, View } from 'react-native';
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import AppConfig from './AppConfig';
+import { appColors, getTimeString, parse24HourTimeString } from './common';
+import Reservation from './Reservation';
+import global_styles from './styles/global_styles';
+import reservation_styles from './styles/reservation_styles';
 
-const ss = StyleSheet.create({
-    mainView:{
-        flex:1,
-        marginTop:5,
-    },
-    statusView:{
-        minHeight:100,
-        justifyContent:'center',
-    },
-    statusText:{
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        color:appColors.iosSystemGray.light,
-    },
-    sectionHeaderView:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'baseline',
-        marginTop:10,
-    },
-    timeText:{
-        color:appColors.iosSystemGray.light,
-        fontSize:appSizes.large.title2,
-        marginLeft:10,
-    },
-    totalGuestsText:{
-        color:appColors.iosSystemGray.light,
-        fontSize:appSizes.large.body,
-        marginRight:10,
-    }
-});
-
-export default function({date, fetchCounter, onSwipeLeft, onSwipeRight, onPress}){
-    const app_config = useContext(AppConfig);
+export default function({date, onSwipeLeft, onSwipeRight, onPress}){
+    const [s_config, setConfigState] = useContext(AppConfig);
 
     //state
     const [s_is_fetching, setIsFetchingState] = useState(true);
@@ -52,10 +21,10 @@ export default function({date, fetchCounter, onSwipeLeft, onSwipeRight, onPress}
     //cached
     const c_tag_colors = useMemo(() => {
         const tag_colors = {};
-        app_config.tagData.forEach(tag => {
+        s_config.tagData.forEach(tag => { 
             tag_colors[tag.name] = tag.color;
         });
-    }, [app_config]);
+    }, [s_config]);
 
     const c_reservation_by_time_total_guests = useMemo(() => {
         const reservation_by_time_total_guests = {};
@@ -74,9 +43,11 @@ export default function({date, fetchCounter, onSwipeLeft, onSwipeRight, onPress}
     useEffect(() => { //run this whenever date changes
         setIsFetchingState(true);
 
-        const url = getEnv().API_URL + '/reservations?startDate=' + formatISO(date, {representation:'date'});
+        const url = s_config.env.API_URL + '/reservations?startDate=' + formatISO(date, {representation:'date'});
         const headers = {};
-        headers[getEnv().API_KEY_HEADER_NAME] = getEnv().API_KEY;
+        headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
+
+        //Alert.alert('Fetching...', `fetching from ${url} with ${process.env.API_KEY_HEADER_NAME}:${process.env.API_KEY}`, [{text:'OK'}]);
         
         Axios.get(url, {headers:headers}).then(r => {
             if(r.data.result === 'not_found'){
@@ -103,7 +74,7 @@ export default function({date, fetchCounter, onSwipeLeft, onSwipeRight, onPress}
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
             }
         });
-    }, [date, fetchCounter]);
+    }, [date]);
 
     //gestures and animations
     const sv_x_offset = useSharedValue(0);
@@ -136,27 +107,35 @@ export default function({date, fetchCounter, onSwipeLeft, onSwipeRight, onPress}
                 onSwipeLeft();
             }
             else{
+                //interpolate component back to normal, if swipe gesture isn't fully detected
                 sv_opacity.value = withTiming(1, {duration:250});
                 sv_x_offset.value = withTiming(0, {duration:250});
             }
         }
+        else{
+            //interpolate component back to normal, if swipe gesture isn't fully detected
+            sv_opacity.value = withTiming(1, {duration:250});
+            sv_x_offset.value = withTiming(0, {duration:250});
+        }
     });
 
     return (<GestureDetector gesture={g_pan_handler}>
-        <Animated.View style={[ss.mainView, as_main_view]} onStartShouldSetResponder={onPress}>
+        <Animated.View style={[global_styles.fullView, as_main_view]} onStartShouldSetResponder={onPress}>
             <ScrollView>
                 {s_has_reservations && Object.keys(s_reservations_by_time).sort().map(time_section => <View key={time_section}>
-                    <View style={ss.sectionHeaderView} >
-                        <Text style={ss.timeText}>{getTimeString(parse24HourTimeString(time_section), true)}</Text>
-                        <Text style={ss.totalGuestsText} >Total Guests: {c_reservation_by_time_total_guests[time_section]}</Text>
+                    <View style={reservation_styles.sectionHeaderView} >
+                        <Text style={[global_styles.bodySubHeading, reservation_styles.timeText]}>{getTimeString(parse24HourTimeString(time_section), true)}</Text>
+                        <Text style={[global_styles.bodyText, reservation_styles.totalGuestsText]} >Total Guests: {c_reservation_by_time_total_guests[time_section]}</Text>
                     </View>
-                    {s_reservations_by_time[time_section].map(reservation => <Reservation
-                        item={reservation}
-                        getTagColor={tag_name => c_tag_colors[tag_name]}
-                        key={reservation._id} />)}
+                    <View style={reservation_styles.reservationView}>
+                        {s_reservations_by_time[time_section].map(reservation => <Reservation
+                            item={reservation}
+                            getTagColor={tag_name => c_tag_colors[tag_name]}
+                            key={reservation._id} />)}
+                    </View>
                 </View>)}
-                <View style={ss.statusView}>
-                    <Text style={ss.statusText}>{s_is_fetching ? 'Fetching reservations...' : 'That\'s all folks!'}</Text>
+                <View style={[global_styles.centeringView, reservation_styles.statusView]}>
+                    <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_is_fetching ? 'Fetching reservations...' : 'That\'s all folks!'}</Text>
                     {s_is_fetching && <ActivityIndicator color={appColors.main} size='large' />}
                 </View>
             </ScrollView>

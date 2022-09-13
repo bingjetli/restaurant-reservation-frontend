@@ -1,60 +1,8 @@
 import React, { useRef } from 'react';
-import { StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
-import { appColors, appSizes } from './common';
-
-const ss = StyleSheet.create({
-    mainView:{
-        alignItems:'center',
-    },
-    pickerView:{
-        flexDirection:'row',
-    },
-    pickerPressable:{
-        minHeight:50,
-        minWidth:50,
-        borderRadius:25,
-        justifyContent:'center',
-    },
-    pickerSelectedPressable:{
-        backgroundColor:appColors.main,
-        minHeight:50,
-        minWidth:50,
-        borderRadius:25,
-        justifyContent:'center',
-    },
-    pickerText:{
-        color:appColors.main,
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-    },
-    pickerSelectedText:{
-        color:appColors.iosSystemWhite.light,
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        fontWeight:'bold',
-    },
-    pickerSelectedAlternateText:{
-        color:appColors.iosSystemWhite.light,
-        textAlign:'center',
-        fontSize:appSizes.large.body,
-        fontWeight:'bold',
-        marginHorizontal:10,
-    },
-    pickerTextInput:{
-        color:appColors.main,
-        textAlign:'center',
-        fontSize:appSizes.large.title1,
-        fontWeight:'bold',
-        marginVertical:10,
-        //backgroundColor:appColors.iosSystemGray6.light,
-        borderRadius:100,
-        borderColor:appColors.main,
-        borderWidth:1,
-        borderStyle:'solid',
-        maxWidth:100,
-        minWidth:100,
-    },
-});
+import { Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { appColors } from './common';
+import global_styles from './styles/global_styles';
+import guest_picker_styles from './styles/guest_picker_styles';
 
 export default function({guests, onUpdate}){
 
@@ -67,41 +15,41 @@ export default function({guests, onUpdate}){
         r_textbox.current.blur();
     }
 
-    return (<View style={ss.mainView}>
+    return (<View style={global_styles.centeringView}>
         <TextInput 
-            style={ss.pickerTextInput} 
+            style={[global_styles.textBox, guest_picker_styles.textBox]} 
             value={guests.toString()}
             maxLength={3}
             keyboardType='number-pad'
             onFocus={() => r_textbox.current.clear()}
             onChangeText={text => onUpdate(Number(text))}
             ref={r_textbox} />
-        <View style={ss.pickerView}>
+        <View style={guest_picker_styles.pickerView}>
             {[1, 2, 3, 4, 5].map(i => <TouchableHighlight 
-                style={guests === i ? ss.pickerSelectedPressable : ss.pickerPressable} 
+                style={guests === i ? guest_picker_styles.pickerButtonSelected : guest_picker_styles.pickerButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={() => setGuests(i)}
                 key={i}>
-                <Text style={guests === i ? ss.pickerSelectedText : ss.pickerText}>{i}</Text>
+                <Text style={guests === i ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText}>{i}</Text>
             </TouchableHighlight>)}
         </View>
-        <View style={ss.pickerView}>
+        <View style={guest_picker_styles.pickerView}>
             {[6, 7, 8, 9, 10].map(i => <TouchableHighlight 
-                style={guests === i ? ss.pickerSelectedPressable : ss.pickerPressable} 
+                style={guests === i ? guest_picker_styles.pickerButtonSelected : guest_picker_styles.pickerButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={() => setGuests(i)}
                 key={i}>
-                <Text style={guests === i ? ss.pickerSelectedText : ss.pickerText}>{i}</Text>
+                <Text style={guests === i ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText}>{i}</Text>
             </TouchableHighlight>)}
         </View>
         <TouchableHighlight 
-            style={guests > 10 || guests < 1 ? ss.pickerSelectedPressable : ss.pickerPressable} 
+            style={guests > 10 || guests < 1 ? guest_picker_styles.pickerButtonAlternateSelected : guest_picker_styles.pickerButtonAlternate} 
             activeOpacity={0.6}
             underlayColor={appColors.iosSystemGray5.light}
             onPress={() => r_textbox.current.focus()} >
-            <Text style={guests > 10 || guests < 1 ? ss.pickerSelectedAlternateText : ss.pickerText} >Custom Value</Text>
+            <Text style={guests > 10 || guests < 1 ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText} >Custom Value</Text>
         </TouchableHighlight>
     </View>);
 }

@@ -1,8 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import React, { useContext, useRef, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
 import { appColors, appSizes } from '../common';
+import * as SecureStore from 'expo-secure-store';
+import AppConfig from '../AppConfig';
+import setup_styles from '../styles/setup_styles';
+import global_styles from '../styles/global_styles';
 
 const ss = StyleSheet.create({
     mainView:{
@@ -96,8 +100,9 @@ const ss = StyleSheet.create({
         color:appColors.main,
         fontSize:appSizes.large.title1,
         textAlign:'center',
-        maxWidth:250,
-        minWidth:250,
+        paddingHorizontal:15,
+        maxWidth:300,
+        minWidth:300,
         minHeight:30,
         //backgroundColor:appColors.iosSystemGray6.light,
         borderRadius:100,
@@ -109,8 +114,10 @@ const ss = StyleSheet.create({
 });
 
 export default function({route, navigation}){
+    const [s_config, setConfigState] = useContext(AppConfig);
+
     //state
-    const [s_last_name, setLastNameState] = useState('');
+    const [s_api_url, setApiUrlState] = useState('');
 
     //ref
     const r_textbox = useRef(null);
@@ -121,12 +128,17 @@ export default function({route, navigation}){
     }
 
     function goToNextScreen(){
-        const params = {...route.params};
-        params.lastName = s_last_name;
+        SecureStore.setItemAsync('API_URL', s_api_url).then(r => {
+            const s_config_copy = {...s_config};
+            s_config_copy.env.API_URL = s_api_url;
+            setConfigState(s_config_copy);
 
-        navigation.navigate({
-            name:'create-phonenumber',
-            params:params,
+            //API_URL set successfully, move to the next screen
+            navigation.navigate({
+                name:'setup-apikey',
+            });
+        }).catch(e => {
+            Alert.alert('Failed To Set API_URL', `The app may not work properly, please contact the developer to resolve this issue: ${e}`, [{text:'OK'}]);
         });
     }
 
@@ -134,49 +146,49 @@ export default function({route, navigation}){
         navigation.pop();
     }
 
-    return (<SafeAreaView style={ss.mainView}>
-        <View style={ss.headerView}>
-            <TouchableHighlight 
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+        <View style={global_styles.headerView}>
+            {/*<TouchableHighlight 
                 style={ss.headerBackPressable} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={returnToHomeScreen} >
                 <>
-                    <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
-                    <Text style={ss.headerBackText} >Cancel</Text>
+                <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
+                <Text style={ss.headerBackText} >Cancel</Text>
                 </>
-            </TouchableHighlight>
-            <Text style={ss.headerText}>Add Reservation</Text>
+            </TouchableHighlight>*/}
+            <View style={{flex:1}}></View>
+            <Text style={global_styles.headerText}>Initial Setup</Text>
             <View style={{flex:1}}></View>
         </View>
-        <View style={ss.bodyView}>
-            <Text style={ss.bodyTitleText} >Last Name</Text>
-            <Text style={ss.bodyText} >Followed by the Last Name of the person to make this Reservation under.</Text>
-            <Text style={ss.bodyText} >Likewise, this should also be a minimum of three (3) letters.</Text>
+        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >API URL</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Please enter the API URL provided to you below.</Text>
             <TextInput 
-                style={ss.bodyTextInput} 
-                value={s_last_name} 
+                style={[global_styles.textBox, setup_styles.bodyTextBox, {marginTop:25, maxWidth:300, minWidth:300}]} 
+                value={s_api_url} 
                 autoFocus={true}
-                onPressIn={() => setLastNameState('')}
-                onChangeText={next => setLastNameState(next.trim())} 
+                onPressIn={() => setApiUrlState('')}
+                onChangeText={next => setApiUrlState(next.trim())} 
                 ref={r_textbox} />
         </View>
-        <View style={ss.footerView}>
+        <View style={setup_styles.footerView}>
             <TouchableHighlight 
-                style={s_last_name.length < 3 ? ss.footerNextDisabledPressable : ss.footerNextPressable} 
+                style={s_api_url.length < 19 ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
+                disabled={s_api_url.length < 19}
                 activeOpacity={0.6}
                 underlayColor={appColors.mainComplementary1}
-                onPress={goToNextScreen} 
-                disabled={s_last_name.length < 3}>
-                <Text style={ss.footerNextText}>Continue</Text>
+                onPress={goToNextScreen}>
+                <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>
-            <TouchableHighlight 
+            {/*<TouchableHighlight 
                 style={ss.footerBackPressable} 
                 activeOpacity={0.6}
                 underlayColor={appColors.iosSystemGray5.light}
                 onPress={goToPreviousScreen}>
                 <Text style={ss.footerBackText}>Go Back</Text>
-            </TouchableHighlight>
+            </TouchableHighlight>*/}
         </View>
     </SafeAreaView>);
 }
