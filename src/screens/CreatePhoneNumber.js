@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Image, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Image, Keyboard, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
 import { appColors } from '../common';
@@ -77,7 +77,7 @@ export default function({route, navigation}){
         else r_line_number_textbox.current.focus();
     }
 
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={Keyboard.dismiss()}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
