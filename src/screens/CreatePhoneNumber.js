@@ -77,7 +77,7 @@ export default function({route, navigation}){
         else r_line_number_textbox.current.focus();
     }
 
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={Keyboard.dismiss()}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
@@ -92,7 +92,7 @@ export default function({route, navigation}){
             <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
+        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]} onStartShouldSetResponder={Keyboard.dismiss()}>
             <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Phone Number</Text>
             <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Almost done! Please enter a contact number for this Reservation.</Text>
             <View style={phone_number_styles.falseTextBox}>
