@@ -78,7 +78,7 @@ export default function({route, navigation}){
     }
 
     return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
-        <KeyboardAvoidingView behavior='height'>
+        <KeyboardAvoidingView behavior='position'>
             <View style={global_styles.headerView}>
                 <TouchableHighlight 
                     style={global_styles.headerBackButton} 
