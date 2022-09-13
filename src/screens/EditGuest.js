@@ -128,7 +128,7 @@ export default function({route, navigation}){
         });
     }
 
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={ () => Keyboard.dismiss()}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
