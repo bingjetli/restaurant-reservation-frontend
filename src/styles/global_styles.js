@@ -56,7 +56,7 @@ export default StyleSheet.create({
         flex:3,
         alignSelf:'center',
         textAlign:'center',
-        color:appColors.text3,
+        color:appColors.text5,
         paddingHorizontal:10,
     },
     bodyHeading:{
@@ -162,7 +162,7 @@ export default StyleSheet.create({
         padding:10,
     },
     actionSheetContentView:{
-        backgroundColor:appColors.iosSystemWhite.light,
+        backgroundColor:appColors.content,
         marginBottom:10,
         borderRadius:5,
         alignItems:'center',
@@ -172,7 +172,7 @@ export default StyleSheet.create({
     actionSheetContentDivider:{
         width:'100%',
         height:1,
-        backgroundColor:appColors.iosSystemGray5.light,
+        backgroundColor:appColors.content2,
     },
     actionSheetContentButton:{
         minHeight:50,
@@ -180,7 +180,7 @@ export default StyleSheet.create({
         width:'100%',
     },
     actionSheetCancelButton:{
-        backgroundColor:appColors.iosSystemWhite.light,
+        backgroundColor:appColors.content,
         width:'100%',
         maxWidth:400,
         borderRadius:5,

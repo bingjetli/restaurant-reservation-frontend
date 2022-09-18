@@ -45,7 +45,7 @@ export default function({route, navigation}){
             {/*<TouchableHighlight 
                 style={ss.headerBackPressable} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={returnToHomeScreen} >
                 <>
                 <Image style={ss.headerBackIcon} source={ArrowBackIosIcon} />
@@ -79,7 +79,7 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={global_styles.secondaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={goToPreviousScreen}>
                 <Text style={global_styles.secondaryButtonText}>Go Back</Text>
             </TouchableHighlight>

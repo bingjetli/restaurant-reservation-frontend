@@ -3,8 +3,8 @@ import { appColors } from '../common';
 
 export default StyleSheet.create({
     mainText:{
-        backgroundColor:appColors.iosSystemGray6.light,
-        color:appColors.text2,
+        backgroundColor:appColors.content2,
+        color:appColors.text4,
         paddingHorizontal:10,
         paddingVertical:5,
         borderRadius:5,

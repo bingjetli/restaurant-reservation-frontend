@@ -28,7 +28,7 @@ export default function({guests, onUpdate}){
             {[1, 2, 3, 4, 5].map(i => <TouchableHighlight 
                 style={guests === i ? guest_picker_styles.pickerButtonSelected : guest_picker_styles.pickerButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={() => setGuests(i)}
                 key={i}>
                 <Text style={guests === i ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText}>{i}</Text>
@@ -38,7 +38,7 @@ export default function({guests, onUpdate}){
             {[6, 7, 8, 9, 10].map(i => <TouchableHighlight 
                 style={guests === i ? guest_picker_styles.pickerButtonSelected : guest_picker_styles.pickerButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={() => setGuests(i)}
                 key={i}>
                 <Text style={guests === i ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText}>{i}</Text>
@@ -47,7 +47,7 @@ export default function({guests, onUpdate}){
         <TouchableHighlight 
             style={guests > 10 || guests < 1 ? guest_picker_styles.pickerButtonAlternateSelected : guest_picker_styles.pickerButtonAlternate} 
             activeOpacity={0.6}
-            underlayColor={appColors.iosSystemGray5.light}
+            underlayColor={appColors.content2}
             onPress={() => r_textbox.current.focus()} >
             <Text style={guests > 10 || guests < 1 ? guest_picker_styles.pickerButtonSelectedText : guest_picker_styles.pickerButtonText} >Custom Value</Text>
         </TouchableHighlight>

@@ -3,7 +3,7 @@ import { appColors } from '../common';
 
 export default StyleSheet.create({
     mainView:{
-        backgroundColor:appColors.iosSystemWhite.light,
+        backgroundColor:appColors.content,
     },
     bodyView:{
         marginHorizontal:10,
@@ -13,12 +13,12 @@ export default StyleSheet.create({
     },
     bodyHeading:{
         marginBottom:10,
-        color:appColors.text2,
+        color:appColors.text4,
         textAlign:'center',
     },
     bodyText:{
         textAlign:'center',
-        color:appColors.text2,
+        color:appColors.text3,
         marginBottom:10,
     },
     bodyEmphasisText:{
@@ -26,7 +26,7 @@ export default StyleSheet.create({
         fontFamily:'PTSerif-Italic',
     },
     bodyCaption:{
-        color:appColors.text2,
+        color:appColors.text3,
         marginTop:10,
     },
     bodyTextBox:{

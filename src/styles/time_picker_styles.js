@@ -5,14 +5,12 @@ export default StyleSheet.create({
     mainView:{
         maxWidth:400,
         alignItems:'center',
-        //backgroundColor:'#ffff0055'
     },
     pickerView:{
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-evenly',
         width:'100%',
-        //backgroundColor:'#00ff0055'
     },
     pickerButtonText:{
         fontFamily:'PTSans-Regular',
@@ -50,22 +48,15 @@ export default StyleSheet.create({
         color:appColors.text,
         marginBottom:10,
 
-        // borderColor:'darkslategray',
-        // borderWidth:1,
-        // borderRadius:5,
-
         padding:10,
         maxWidth:150,
     },
     hourView:{
         flexDirection:'row',
-        //backgroundColor:'#ff000055'
     },
     minuteView:{
         flexDirection:'row',
-        //backgroundColor:'#ff000055'
     },
     ampmView:{
-        //backgroundColor:'#ff000055'
     },
 });

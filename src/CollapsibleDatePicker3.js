@@ -98,10 +98,14 @@ export default function({date, onSelect, isVisible}){
     }
 
     //gestures-and-animations
+    //---shared-values
     const sv_picker_max_height = useSharedValue(0);
     const sv_picker_opacity = useSharedValue(0);
+    const sv_picker_paddingBottom = useSharedValue(0);
     const sv_calendar_xoffset = useSharedValue(0);
     const sv_calendar_opacity = useSharedValue(1);
+
+    //---animated-styles
     const as_calendar_view = useAnimatedStyle(() => {
         return {
             opacity:sv_calendar_opacity.value,
@@ -114,6 +118,7 @@ export default function({date, onSelect, isVisible}){
         return {
             maxHeight:`${sv_picker_max_height.value}%`,
             opacity:sv_picker_opacity.value,
+            paddingBottom:sv_picker_paddingBottom.value,
             overflow:'hidden',
         };
     });
@@ -121,11 +126,13 @@ export default function({date, onSelect, isVisible}){
     useEffect(() => { //run this whenever the picker visibility changes
         if(isVisible){
             sv_picker_max_height.value = withTiming(100, {duration:250});
-            sv_picker_opacity.value = withTiming(1, {duration:500});
+            sv_picker_opacity.value = withTiming(1, {duration:125});
+            sv_picker_paddingBottom.value = withTiming(20, {duration:250});
         }
         else{
             sv_picker_max_height.value = withTiming(0, {duration:250});
             sv_picker_opacity.value = withTiming(0, {duration:125});
+            sv_picker_paddingBottom.value = withTiming(0, {duration:250});
         }
     }, [isVisible]);
 
@@ -162,14 +169,14 @@ export default function({date, onSelect, isVisible}){
         }
     });
 
-    return(<View style={{flexDirection:'row-reverse', backgroundColor:appColors.iosSystemWhite.light}}>
+    return(<View style={{flexDirection:'row-reverse', backgroundColor:appColors.content, justifyContent:'center', borderBottomColor:appColors.content3, borderBottomWidth:1}}>
 
         {width / 400 >= 1.5 && <Animated.View style={[{flex:1, justifyContent:'center', alignItems:'center'}, as_picker_view]}>
-            <Text style={{color:appColors.text4, fontSize:150, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
-            <Text style={{color:appColors.text4, fontSize:45, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
+            <Text style={{color:appColors.text5, fontSize:150, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
+            <Text style={{color:appColors.text5, fontSize:45, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
         </Animated.View>}
 
-        <Animated.View style={[date_picker_styles.mainView, as_picker_view]}>
+        <Animated.View style={[date_picker_styles.pickerMainView, as_picker_view]}>
             <View style={date_picker_styles.controlsView}>
                 <View style={global_styles.horizontalCenteringView}>
                     <TouchableHighlight

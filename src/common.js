@@ -1,4 +1,28 @@
 export const appColors = {
+    text:'#444648',
+    text2:'#5e6062',
+    text3:'#828384',
+    text4:'#a6a6a8',
+    text5:'#c9caca',
+    text6:'#ededee',
+
+    content:'#fffdfa',
+    content2:'#e6e4e1',
+    content3:'#cccac8',
+    content4:'#b2b1af',
+    content5:'#999896',
+    content6:'#807e7d',
+
+    hexadic:'#8d1eff',
+    hexadic2:'#ff1e90',
+    hexadic3:'#ff8d1e',
+    hexadic4:'#90ff1e',
+    hexadic5:'#1eff8d',
+
+    presentActive:'#1eff8d',
+    absentActive:'#ff8d1e',
+
+    //deprecated
     main:'#1e90ff',
     mainComplementary1:'#80C0FF',
     mainComplementary2:'#4DA7FF',
@@ -13,13 +37,6 @@ export const appColors = {
     secondaryText:'#808080',
     secondaryText2:'#aaaaaa',
     mainTextInvert:'#F8F8FF',
-
-    text:'#647381',
-    text2:'#7e8c9b',
-    text3:'#9ba6b1',
-    text4:'#b7bfc7',
-    text5:'#d4d9de',
-    text5:'#f1f2f4',
 
     iosSystemWhite:{
         light:'#fafaff',

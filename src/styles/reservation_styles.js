@@ -15,12 +15,12 @@ export default StyleSheet.create({
         marginLeft:10,
     },
     totalGuestsText:{
-        color:appColors.text3,
+        color:appColors.text4,
         fontFamily:'PTSans-Regular',
         marginRight:10,
     },
     statusText:{
-        color:appColors.text3,
+        color:appColors.text4,
         textAlign:'center',
     },
     statusView:{
@@ -30,9 +30,9 @@ export default StyleSheet.create({
         paddingHorizontal:10,
     },
     reservationMainView:{
-        backgroundColor:appColors.iosSystemWhite.light,
+        backgroundColor:appColors.content,
         marginBottom:5,
-        borderBottomColor:appColors.iosSystemGray5.light,
+        borderBottomColor:appColors.content3,
         borderBottomWidth:1,
     },
     reservationAlternateView:{
@@ -53,7 +53,7 @@ export default StyleSheet.create({
     },
     reservationBodyText:{
         fontFamily:'PTSans-Regular',
-        color:appColors.text3,
+        color:appColors.text4,
         marginHorizontal:10,
     },
     reservationBodyView:{
@@ -61,7 +61,7 @@ export default StyleSheet.create({
         marginHorizontal:10,
     },
     reservationNotesText:{
-        color:appColors.text3,
+        color:appColors.text4,
     },
     reservationFooterButton:{
         minHeight:50,
@@ -70,15 +70,15 @@ export default StyleSheet.create({
         paddingHorizontal:10,
     },
     presentButtonSelected:{
-        tintColor:appColors.iosSystemGreen.light,
+        tintColor:appColors.hexadic5,
     },
     presentButtonSelectedText:{
-        color:appColors.iosSystemGreen.light,
+        color:appColors.hexadic5,
     },
     absentButtonSelected:{
-        tintColor:appColors.iosSystemOrange.light,
+        tintColor:appColors.hexadic3,
     },
     absentButtonSelectedText:{
-        color:appColors.iosSystemOrange.light,
+        color:appColors.hexadic3,
     },
 });

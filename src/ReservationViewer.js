@@ -120,7 +120,7 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
     });
 
     return (<GestureDetector gesture={g_pan_handler}>
-        <Animated.View style={[global_styles.fullView, as_main_view]} onStartShouldSetResponder={onPress}>
+        <Animated.View style={[global_styles.fullView, as_main_view, {maxWidth:'100%', width:'100%', alignSelf:'center'}]} onStartShouldSetResponder={onPress}>
             <ScrollView>
                 {s_has_reservations && Object.keys(s_reservations_by_time).sort().map(time_section => <View key={time_section}>
                     <View style={reservation_styles.sectionHeaderView} >

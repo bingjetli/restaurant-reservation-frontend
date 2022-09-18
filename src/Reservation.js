@@ -176,7 +176,7 @@ export default function({item}){
                 <TouchableHighlight 
                     style={global_styles.actionSheetCancelButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={() => setShowOptionsState(false)}>
                     <Text style={global_styles.secondaryButtonText}>Cancel</Text>
                 </TouchableHighlight>
@@ -196,7 +196,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={reschedule}>
                         <Text style={global_styles.secondaryButtonText} >Reschedule Date/Time</Text>
                     </TouchableHighlight>
@@ -205,7 +205,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={editGuests}>
                         <Text style={global_styles.secondaryButtonText} >Change Group Size</Text>
                     </TouchableHighlight>
@@ -214,7 +214,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={editName}>
                         <Text style={global_styles.secondaryButtonText} >Change Name</Text>
                     </TouchableHighlight>
@@ -223,7 +223,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={editPhoneNumber}>
                         <Text style={global_styles.secondaryButtonText} >Change Phone Number</Text>
                     </TouchableHighlight>
@@ -232,7 +232,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={editTags}>
                         <Text style={global_styles.secondaryButtonText} >Change Tags</Text>
                     </TouchableHighlight>
@@ -241,7 +241,7 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={editNotes}>
                         <Text style={global_styles.secondaryButtonText} >Edit Notes</Text>
                     </TouchableHighlight>
@@ -250,9 +250,9 @@ export default function({item}){
                     <TouchableHighlight 
                         style={global_styles.actionSheetContentButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={deleteReservation}>
-                        <Text style={[global_styles.secondaryButtonText, {color:appColors.iosSystemRed.light}]} >Delete</Text>
+                        <Text style={[global_styles.secondaryButtonText, {color:appColors.hexadic2}]} >Delete</Text>
                     </TouchableHighlight>
                 </Animated.View>
             </View>
@@ -262,7 +262,7 @@ export default function({item}){
             <TouchableHighlight 
                 style={global_styles.iconButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={() => setShowOptionsState(true)}>
                 <Image style={global_styles.iconButtonImage} source={MoreVertIcon} />
             </TouchableHighlight>
@@ -284,7 +284,7 @@ export default function({item}){
                 <TouchableHighlight 
                     style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={() => markStatusForReservation('present')} >
                     <>
                         <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={PersonFilledIcon} />
@@ -294,7 +294,7 @@ export default function({item}){
                 <TouchableHighlight 
                     style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={() => markStatusForReservation('present')} >
                     <>
                         <Image style={global_styles.iconButtonImage} source={PersonIcon} />
@@ -306,7 +306,7 @@ export default function({item}){
                 <TouchableHighlight 
                     style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={() => markStatusForReservation('absent')}>
                     <>
                         <Image style={[global_styles.iconButtonImage, reservation_styles.absentButtonSelected]} source={PersonOffFilledIcon} />
@@ -316,7 +316,7 @@ export default function({item}){
                 <TouchableHighlight 
                     style={reservation_styles.reservationFooterButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={() => markStatusForReservation('absent')}>
                     <>
                         <Image style={global_styles.iconButtonImage} source={PersonOffIcon} />

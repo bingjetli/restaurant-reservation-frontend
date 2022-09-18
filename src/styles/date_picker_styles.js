@@ -3,12 +3,11 @@ import { appColors } from '../common';
 
 export default StyleSheet.create({
     mainView:{
-        //backgroundColor:'#ff000055',
         maxWidth:400,
     },
     pickerMainView:{
         maxWidth:400,
-        backgroundColor:appColors.iosSystemWhite.light,
+        backgroundColor:appColors.content,
     },
     displayText:{
         fontFamily:'PTSansNarrow-Regular',
@@ -16,10 +15,6 @@ export default StyleSheet.create({
         textAlign:'center',
         color:appColors.text,
         marginBottom:10,
-
-        // borderColor:'darkslategray',
-        // borderWidth:1,
-        // borderRadius:5,
 
         padding:10,
     },
@@ -55,7 +50,6 @@ export default StyleSheet.create({
         aspectRatio:1,
         justifyContent:'center',
         alignItems:'center',
-        //backgroundColor:'#ffff0055',
     },
     dateButton:{
         minHeight:50,
@@ -63,7 +57,6 @@ export default StyleSheet.create({
         borderRadius:25,
         justifyContent:'center',
         alignItems:'center',
-        //backgroundColor:'#00ffff55',
     },
     dateButtonSelected:{
         minHeight:50,
@@ -84,7 +77,7 @@ export default StyleSheet.create({
         color:'ghostwhite',
     },
     pickerView:{
-        backgroundColor:'ghostwhite',
+        backgroundColor:'red',
         maxWidth:400,
         overflow:'hidden',
     },

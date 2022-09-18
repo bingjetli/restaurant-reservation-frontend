@@ -44,7 +44,7 @@ export default function({time, onSelect}){
                     {[1, 2, 3, 4, 5, 6].map(i => <TouchableHighlight 
                         style={to12Hour(time.hour) === i ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={() => setHour(i)}
                         key={i}>
                         <Text style={to12Hour(time.hour) === i ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText}>{i}</Text>
@@ -54,7 +54,7 @@ export default function({time, onSelect}){
                     {[7, 8, 9, 10, 11, 0].map(i => <TouchableHighlight 
                         style={to12Hour(time.hour) === i ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={() => setHour(i)}
                         key={i}>
                         <Text style={to12Hour(time.hour) === i ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText}>{i === 0 ? 12 : i}</Text>
@@ -67,7 +67,7 @@ export default function({time, onSelect}){
                     {[0, 5, 10, 15, 20, 25].map(i => <TouchableHighlight 
                         style={time.minute === i ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={() => setMinute(i)}
                         key={i}>
                         <Text style={time.minute === i ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText}>{i < 10 ? '0' + i : i}</Text>
@@ -77,7 +77,7 @@ export default function({time, onSelect}){
                     {[30, 35, 40, 45, 50, 55].map(i => <TouchableHighlight 
                         style={time.minute === i ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray5.light}
+                        underlayColor={appColors.content2}
                         onPress={() => setMinute(i)}
                         key={i}>
                         <Text style={time.minute === i ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText}>{i}</Text>
@@ -89,14 +89,14 @@ export default function({time, onSelect}){
                 <TouchableHighlight 
                     style={time.hour < 12 ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={toggleTimeOfDay}>
                     <Text style={time.hour < 12 ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText} >AM</Text>
                 </TouchableHighlight>
                 <TouchableHighlight 
                     style={time.hour >= 12 ? time_picker_styles.pickerButtonSelected : time_picker_styles.pickerButton} 
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray5.light}
+                    underlayColor={appColors.content2}
                     onPress={toggleTimeOfDay} >
                     <Text style={time.hour >= 12 ? time_picker_styles.pickerButtonSelectedText : time_picker_styles.pickerButtonText} >PM</Text>
                 </TouchableHighlight>

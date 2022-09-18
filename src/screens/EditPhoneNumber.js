@@ -90,7 +90,7 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.iosSystemGray5.light}
+                underlayColor={appColors.content2}
                 onPress={returnToHomeScreen} >
                 <>
                 <Image style={global_styles.headerBackButtonIcon} source={ArrowBackIosIcon} />
