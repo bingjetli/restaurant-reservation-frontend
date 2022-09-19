@@ -9,13 +9,13 @@ export default StyleSheet.create({
         marginTop:10,
     },
     timeText:{
-        color:appColors.text2,
+        color:appColors.text,
         fontFamily:'PTSans-Regular',
         fontSize:22.5,
         marginLeft:10,
     },
     totalGuestsText:{
-        color:appColors.text4,
+        color:appColors.text2,
         fontFamily:'PTSans-Regular',
         marginRight:10,
     },
@@ -39,6 +39,8 @@ export default StyleSheet.create({
         width:'100%',
         maxWidth:400,
         paddingVertical:10,
+        borderColor:appColors.content3,
+        borderWidth:1,
     },
     reservationHeaderView:{
         flexDirection:'row',
@@ -70,15 +72,15 @@ export default StyleSheet.create({
         paddingHorizontal:10,
     },
     presentButtonSelected:{
-        tintColor:appColors.hexadic5,
+        tintColor:appColors.success3,
     },
     presentButtonSelectedText:{
-        color:appColors.hexadic5,
+        color:appColors.success3,
     },
     absentButtonSelected:{
-        tintColor:appColors.hexadic3,
+        tintColor:appColors.warning3,
     },
     absentButtonSelectedText:{
-        color:appColors.hexadic3,
+        color:appColors.warning3,
     },
 });

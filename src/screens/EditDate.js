@@ -52,7 +52,7 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.mainComplementary1}
+                underlayColor={appColors.main4}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>

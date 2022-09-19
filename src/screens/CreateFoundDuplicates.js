@@ -97,7 +97,8 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={s_selected === '' ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.mainComplementary1}
+                underlayColor={appColors.main4}
+                disabled={s_selected === '' ? true : false}
                 onPress={replaceReservation}>
                 <Text style={global_styles.primaryButtonText}>Replace</Text>
             </TouchableHighlight>

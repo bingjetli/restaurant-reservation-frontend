@@ -43,7 +43,7 @@ export default function({route, navigation}){
     }
 
     function openSettings(){
-        console.log('ToDo: Settings Page');
+        navigation.navigate('settings');
     }
 
     return(
@@ -51,7 +51,7 @@ export default function({route, navigation}){
             <View style={home_styles.headerView}>
                 <View style={home_styles.headerLogoView} >
                     <Image style={home_styles.headerLogo} source={VuLogo} />
-                    {width > 600 && <Text style={home_styles.headerLogoText} >Restaurant</Text>}
+                    {width > 600 && <Text style={home_styles.headerLogoText} >Reservations</Text>}
                 </View>
 
                 <View style={global_styles.fullCenteringView}>

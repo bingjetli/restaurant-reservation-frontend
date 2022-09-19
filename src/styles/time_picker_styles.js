@@ -15,13 +15,13 @@ export default StyleSheet.create({
     pickerButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'dodgerblue',
+        color:appColors.main3,
         textAlign:'center',
     },
     pickerButtonSelectedText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'ghostwhite',
+        color:appColors.content,
         textAlign:'center',
     },
     pickerButton:{
@@ -39,7 +39,7 @@ export default StyleSheet.create({
         alignItems:'center',
         borderRadius:25,
         margin:2,
-        backgroundColor:'dodgerblue',
+        backgroundColor:appColors.main3,
     },
     displayText:{
         fontFamily:'PTSans-Regular',

@@ -13,7 +13,7 @@ export default StyleSheet.create({
     },
     bodyHeading:{
         marginBottom:10,
-        color:appColors.text4,
+        color:appColors.text3,
         textAlign:'center',
     },
     bodyText:{
@@ -22,11 +22,11 @@ export default StyleSheet.create({
         marginBottom:10,
     },
     bodyEmphasisText:{
-        color:appColors.text,
+        color:appColors.text2,
         fontFamily:'PTSerif-Italic',
     },
     bodyCaption:{
-        color:appColors.text3,
+        color:appColors.text4,
         marginTop:10,
     },
     bodyTextBox:{
@@ -39,8 +39,8 @@ export default StyleSheet.create({
         textAlignVertical:'top',
         fontFamily:'PTSans-Regular',
         fontSize:22,
-        color:'dodgerblue',
-        borderColor:'dodgerblue',
+        color:appColors.main3,
+        borderColor:appColors.main3,
         borderWidth:1,
         borderRadius:5,
         padding:10,

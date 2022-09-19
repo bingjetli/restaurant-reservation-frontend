@@ -252,7 +252,7 @@ export default function({item}){
                         activeOpacity={0.6}
                         underlayColor={appColors.content2}
                         onPress={deleteReservation}>
-                        <Text style={[global_styles.secondaryButtonText, {color:appColors.hexadic2}]} >Delete</Text>
+                        <Text style={[global_styles.secondaryButtonText, {color:appColors.danger3}]} >Delete</Text>
                     </TouchableHighlight>
                 </Animated.View>
             </View>

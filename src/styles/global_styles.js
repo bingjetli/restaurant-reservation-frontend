@@ -42,13 +42,13 @@ export default StyleSheet.create({
     headerBackButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:22.5,
-        color:'dodgerblue',
+        color:appColors.main3,
         marginLeft:-5,
     },
     headerBackButtonIcon:{
         width:25,
         height:25,
-        tintColor:'dodgerblue',
+        tintColor:appColors.main3,
     },
     headerText:{
         fontFamily:'PTSans-Regular',
@@ -56,7 +56,7 @@ export default StyleSheet.create({
         flex:3,
         alignSelf:'center',
         textAlign:'center',
-        color:appColors.text5,
+        color:appColors.text4,
         paddingHorizontal:10,
     },
     bodyHeading:{
@@ -82,11 +82,11 @@ export default StyleSheet.create({
     primaryButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'ghostwhite',
+        color:appColors.content,
         textAlign:'center',
     },
     primaryButton:{
-        backgroundColor:'dodgerblue',
+        backgroundColor:appColors.main3,
         maxWidth:400,
         minHeight:50,
         minWidth:50,
@@ -95,7 +95,7 @@ export default StyleSheet.create({
         borderRadius:5,
     },
     primaryButtonDisabled:{
-        backgroundColor:'gray',
+        backgroundColor:appColors.inactive,
         maxWidth:400,
         minHeight:50,
         minWidth:50,
@@ -106,7 +106,7 @@ export default StyleSheet.create({
     secondaryButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'dodgerblue',
+        color:appColors.main3,
         textAlign:'center',
     },
     secondaryButton:{
@@ -120,9 +120,9 @@ export default StyleSheet.create({
     textBox:{
         fontFamily:'PTSans-Regular',
         fontSize:22.5,
-        color:'dodgerblue',
+        color:appColors.main3,
         textAlign:'center',
-        borderColor:'dodgerblue',
+        borderColor:appColors.main3,
         borderWidth:1,
         borderRadius:5,
         padding:10,
@@ -130,7 +130,7 @@ export default StyleSheet.create({
     iconButtonImage:{
         height:25,
         width:25,
-        tintColor:'dodgerblue',
+        tintColor:appColors.main3,
     },
     iconButton:{
         minHeight:50,
@@ -151,14 +151,14 @@ export default StyleSheet.create({
     labeledIconButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:appColors.main,
+        color:appColors.main3,
         marginRight:5,
     },
     actionSheetModalView:{
         flex:1,
         flexDirection:'column-reverse',
         alignItems:'center',
-        backgroundColor:'#00000055',
+        backgroundColor:'#0000002f',
         padding:10,
     },
     actionSheetContentView:{
@@ -172,7 +172,7 @@ export default StyleSheet.create({
     actionSheetContentDivider:{
         width:'100%',
         height:1,
-        backgroundColor:appColors.content2,
+        backgroundColor:appColors.inactive,
     },
     actionSheetContentButton:{
         minHeight:50,

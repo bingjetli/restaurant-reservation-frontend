@@ -72,7 +72,7 @@ export default function({route, navigation}){
                 style={s_api_url.length < 19 ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
                 disabled={s_api_url.length < 19}
                 activeOpacity={0.6}
-                underlayColor={appColors.mainComplementary1}
+                underlayColor={appColors.main4}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>

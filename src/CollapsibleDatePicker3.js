@@ -172,8 +172,8 @@ export default function({date, onSelect, isVisible}){
     return(<View style={{flexDirection:'row-reverse', backgroundColor:appColors.content, justifyContent:'center', borderBottomColor:appColors.content3, borderBottomWidth:1}}>
 
         {width / 400 >= 1.5 && <Animated.View style={[{flex:1, justifyContent:'center', alignItems:'center'}, as_picker_view]}>
-            <Text style={{color:appColors.text5, fontSize:150, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
-            <Text style={{color:appColors.text5, fontSize:45, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
+            <Text style={{color:appColors.text4, fontSize:150, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
+            <Text style={{color:appColors.text4, fontSize:45, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
         </Animated.View>}
 
         <Animated.View style={[date_picker_styles.pickerMainView, as_picker_view]}>
@@ -182,7 +182,7 @@ export default function({date, onSelect, isVisible}){
                     <TouchableHighlight
                         style={global_styles.iconButton}
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray6.light}
+                        underlayColor={appColors.content2}
                         onPress={previousMonth}>
                         <Image style={[global_styles.iconButtonImage]} source={ChevronLeftIcon} />
                     </TouchableHighlight>
@@ -192,7 +192,7 @@ export default function({date, onSelect, isVisible}){
                     <TouchableHighlight 
                         style={global_styles.iconButton}
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray6.light}
+                        underlayColor={appColors.content2}
                         onPress={nextMonth}>
                         <Image style={[global_styles.iconButtonImage]} source={ChevronRightIcon} />
                     </TouchableHighlight>
@@ -202,7 +202,7 @@ export default function({date, onSelect, isVisible}){
                     <TouchableHighlight
                         style={global_styles.iconButton}
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray6.light}
+                        underlayColor={appColors.content2}
                         onPress={previousYear}>
                         <Image style={[global_styles.iconButtonImage]} source={ChevronLeftIcon} />
                     </TouchableHighlight>
@@ -212,7 +212,7 @@ export default function({date, onSelect, isVisible}){
                     <TouchableHighlight
                         style={global_styles.iconButton}
                         activeOpacity={0.6}
-                        underlayColor={appColors.iosSystemGray6.light}
+                        underlayColor={appColors.content2}
                         onPress={nextYear}>
                         <Image style={[global_styles.iconButtonImage]} source={ChevronRightIcon} />
                     </TouchableHighlight>
@@ -221,7 +221,7 @@ export default function({date, onSelect, isVisible}){
                 <TouchableHighlight 
                     style={global_styles.iconButton}
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray6.light}
+                    underlayColor={appColors.content2}
                     onPress={setToToday}>
                     <Image style={global_styles.iconButtonImage} source={TodayIcon} />
                 </TouchableHighlight>
@@ -229,7 +229,7 @@ export default function({date, onSelect, isVisible}){
                 <TouchableHighlight 
                     style={global_styles.iconButton}
                     activeOpacity={0.6}
-                    underlayColor={appColors.iosSystemGray6.light}
+                    underlayColor={appColors.content2}
                     onPress={toggleTotalGuestsView}>
                     <Image style={global_styles.iconButtonImage} source={s_show_total_guests ? GroupFilledIcon : GroupIcon} />
                 </TouchableHighlight>
@@ -247,7 +247,7 @@ export default function({date, onSelect, isVisible}){
                         {getMonth(date) === getMonth(item) && <TouchableHighlight 
                             style={getDate(date) === getDate(item) ? date_picker_styles.dateButtonSelected : date_picker_styles.dateButton}
                             activeOpacity={0.6}
-                            underlayColor={appColors.iosSystemGray6.light}
+                            underlayColor={appColors.content2}
                             onPress={() => onSelect(item)}>
                             <Text style={getDate(date) === getDate(item) ? 
                                 date_picker_styles.dateButtonTextSelected : 

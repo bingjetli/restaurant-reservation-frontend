@@ -26,7 +26,7 @@ export default StyleSheet.create({
     controlsText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:appColors.text2,
+        color:appColors.text3,
         textAlign:'center',
     },
     monthNameText:{
@@ -43,7 +43,7 @@ export default StyleSheet.create({
         fontFamily:'PTSansCaption-Regular',
         fontSize:13.5,
         textAlign:'center',
-        color:appColors.text3,
+        color:appColors.text4,
     },
     dateView:{
         width:'14.28%',
@@ -64,20 +64,19 @@ export default StyleSheet.create({
         borderRadius:25,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'dodgerblue'
+        backgroundColor:appColors.main3,
     },
     dateButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'dodgerblue',
+        color:appColors.main3,
     },
     dateButtonTextSelected:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:'ghostwhite',
+        color:appColors.content,
     },
     pickerView:{
-        backgroundColor:'red',
         maxWidth:400,
         overflow:'hidden',
     },
@@ -92,7 +91,7 @@ export default StyleSheet.create({
         fontFamily:'PTSans-Regular',
         fontSize:18,
         textAlign:'center',
-        color:'dodgerblue',
+        color:appColors.main3,
     },
     modalView:{
         alignItems:'center',

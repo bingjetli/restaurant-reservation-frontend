@@ -140,7 +140,7 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={s_area_code.length === 3 && s_prefix.length === 3 && s_line_number.length === 4 ? global_styles.primaryButton : global_styles.primaryButtonDisabled} 
                 activeOpacity={0.6}
-                underlayColor={appColors.mainComplementary1}
+                underlayColor={appColors.main4}
                 onPress={goToNextScreen} 
                 disabled={!(s_area_code.length === 3 && s_prefix.length === 3 && s_line_number.length === 4)}>
                 <Text style={global_styles.primaryButtonText}>Change Phone Number</Text>

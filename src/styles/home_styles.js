@@ -25,7 +25,7 @@ export default StyleSheet.create({
         fontFamily:'YesevaOne-Regular',
         fontSize:appSizes.large.title3,
         paddingBottom:2,
-        color:appColors.mainText,
+        color:appColors.text2,
     },
     controlsView:{
         flexDirection:'row',

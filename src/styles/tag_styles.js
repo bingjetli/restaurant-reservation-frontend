@@ -3,8 +3,8 @@ import { appColors } from '../common';
 
 export default StyleSheet.create({
     mainText:{
-        backgroundColor:appColors.content2,
-        color:appColors.text4,
+        backgroundColor:appColors.text5,
+        color:appColors.text3,
         paddingHorizontal:10,
         paddingVertical:5,
         borderRadius:5,
@@ -21,7 +21,7 @@ export default StyleSheet.create({
         textTransform:'capitalize',
     },
     pickerButtonSelectedText:{
-        color:appColors.iosSystemWhite.light,
+        color:appColors.content,
         textTransform:'capitalize',
     },
     pickerButton:{
@@ -30,7 +30,7 @@ export default StyleSheet.create({
         borderRadius:5,
         minHeight:50,
         justifyContent:'center',
-        backgroundColor:appColors.main + '15',
+        backgroundColor:appColors.main5,
     },
     pickerButtonSelected:{
         paddingHorizontal:10,
@@ -38,6 +38,6 @@ export default StyleSheet.create({
         borderRadius:5,
         minHeight:50,
         justifyContent:'center',
-        backgroundColor:appColors.main,
+        backgroundColor:appColors.main3,
     },
 });

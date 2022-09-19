@@ -31,6 +31,7 @@ import SetupApiKey from './src/screens/SetupApiKey';
 import SetupApiUrl from './src/screens/SetupApiUrl';
 import SetupFinish from './src/screens/SetupFinish';
 import SetupWelcome from './src/screens/SetupWelcome';
+import Settings from './src/screens/Settings';
 
 const {Screen, Navigator} = createNativeStackNavigator();
 
@@ -91,29 +92,6 @@ export default function App() {
     'PTSerif-Italic':require('./assets/fonts/PTSerif-Italic.ttf'),
   });
 
-  // useEffect(() => { //run once on init and whenever s_config.env.INITIALIZED changes
-  //   if(s_config.env.INITIALIZED){
-  //     //if the environment variables are initialized, run the GET request
-
-  //     const url = s_config.env.API_URL + '/tags';
-  //     
-  //     const headers = {};
-  //     headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
-  //   
-  //     Axios.get(url, {headers:headers}).then(r => {
-  //       if(r.data.result === 'successful'){
-  //         const config_copy = {...s_config};
-  //         config_copy.tagData = r.data.tags
-
-  //         setConfigState(config_copy);
-  //       }
-  //       else if(r.data.result === 'error_occured'){
-  //         Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
-  //       }
-  //     });
-  //   }
-  // }, [s_config.env.INITIALIZED]);
-
   //event-handlers
   const handleRootViewLayout = useCallback(async () => { //run whenever fonts_loaded or s_config.env.INITIALIZED changes
     if(fonts_loaded && s_config.env.INITIALIZED !== undefined) {
@@ -148,6 +126,7 @@ export default function App() {
                 <Screen name='edit-phonenumber' component={EditPhoneNumber} />
                 <Screen name='edit-tags' component={EditTags} />
                 <Screen name='edit-notes' component={EditNotes} />
+                <Screen name='settings' component={Settings} />
               </> : <>
                 <Screen name='setup-welcome' component={SetupWelcome} />
                 <Screen name='setup-apiurl' component={SetupApiUrl} />

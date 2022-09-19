@@ -136,7 +136,7 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                 </View>)}
                 <View style={[global_styles.centeringView, reservation_styles.statusView]}>
                     <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_is_fetching ? 'Fetching reservations...' : 'That\'s all folks!'}</Text>
-                    {s_is_fetching && <ActivityIndicator color={appColors.main} size='large' />}
+                    {s_is_fetching && <ActivityIndicator color={appColors.main3} size='large' />}
                 </View>
             </ScrollView>
         </Animated.View>
