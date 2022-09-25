@@ -112,30 +112,28 @@ export default function App() {
       s_config_copy.screen.width = width;
 
       //determine whether or not to use the fallback URL
-      if(s_config_copy.env.API_FALLBACK_URL !== undefined){ //only run this step if there's a fallback url set, otherwise it's kind of pointless to run the check
+      if(s_config_copy.env.API_FALLBACK_URL !== undefined){ //only run this step if there is a fallback url set, otherwise it's kind of pointless to run the check
         const headers = {};
         headers[s_config_copy.env.API_KEY_HEADER_NAME] = s_config_copy.env.API_KEY;
 
+        const promise_array = [
+          Axios.get(s_config_copy.env.API_MAIN_URL, {headers:headers, timeout:1000}),
+          Axios.get(s_config_copy.env.API_FALLBACK_URL, {headers:headers, timeout:1000}),
+        ];
+
         try{
-          const response_main = await Axios.get(s_config_copy.env.API_MAIN_URL, {headers:headers, timeout:1000});
-          s_config_copy.env.API_URL = s_config_copy.env.API_MAIN_URL;
+          const response = await Promise.race(promise_array);
+          if(response.status === 200){
+            s_config_copy.env.API_URL = response.config.url;
+          }
+          else throw new Error(`promise resolved with status ${response.status}`);
         }
         catch(e){
-          //main url failed, try fallback
-          try{
-            const response_fallback = await Axios.get(s_config_copy.env.API_FALLBACK_URL, {headers:headers, timeout:1000});
-            s_config_copy.env.API_URL = s_config_copy.env.API_FALLBACK_URL;
-          }
-          catch(e2){
-            //both main url and fallback url failed
-            Alert.alert('Error Initializing App', 'Unable to connect to the backend server. Please make sure you are connected to the internet and that your API Key and URLs are set correctly.', [{text:'OK'}]);
-          }
-
+          Alert.alert('Error Initializing App', `The app could not connect to the backend server. Please make sure your internet connection is working and that your API Key and URLs are not set incorrectly. If this problem persists, please contact the developer about this issue. \n ${e}`, [{text:'OK'}]);
         }
       }
 
       //update the state and trigger the re-render using .setState()
-      console.log(s_config_copy);
       setConfigState(s_config_copy);
     }
 
@@ -143,7 +141,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    console.log(`checking if loaded: fonts_loaded? = ${fonts_loaded}, s_config.env.INITIALIZED? = ${s_config.env.INITIALIZED}, s_config.env.API_URL = ${s_config.env.API_URL}`);
     if(fonts_loaded && s_config.env.INITIALIZED !== undefined && s_config.env.API_URL !== undefined){
       SplashScreen.hideAsync().then(() => {
         setLoadedState(true);

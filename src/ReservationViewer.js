@@ -80,7 +80,7 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
             }
         }).catch(e => {
-            console.log(e);
+            Alert.alert('Error Occured!', e, [{'text':'OK'}]);
         });
     }, [date]);
 
