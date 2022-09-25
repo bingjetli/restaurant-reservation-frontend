@@ -1,6 +1,6 @@
 import { addMonths, addYears, eachDayOfInterval, endOfMonth, endOfWeek, format, formatISO, getDate, getDay, getMonth, getYear, startOfMonth, startOfWeek, subMonths, subYears } from 'date-fns';
 import React, { useMemo, useState, useEffect, useContext } from 'react';
-import { Image, Text, useWindowDimensions, View } from 'react-native';
+import { Alert, Image, Text, useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector, TouchableHighlight } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import ChevronLeftIcon from '../assets/icons/chevron_left.png';
@@ -105,7 +105,7 @@ export default function({date, onSelect, isVisible}){
                     Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
                 }
             }).catch(e => {
-                Alert.alert('Error Occured!', e, [{'text':'OK'}]);
+                if(e.message !== 'canceled') Alert.alert('Error Occured!', `An error occured while fetching reservations for the Collapsible Date Picker \n${e}`, [{'text':'OK'}]);
             });
         }
     }

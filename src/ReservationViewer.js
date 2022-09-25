@@ -80,7 +80,7 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
             }
         }).catch(e => {
-            Alert.alert('Error Occured!', e, [{'text':'OK'}]);
+            if(e.message !== 'canceled') Alert.alert('Error Occured!', `An error occured while fetching reservations for the Reservation Viewer. \n${e}`, [{'text':'OK'}]);
         });
     }, [date]);
 
