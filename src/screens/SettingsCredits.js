@@ -62,11 +62,12 @@ export default function({route, navigation}){
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Bailey Liang</Text>
 
             <Text style={[global_styles.bodyText, settings_style.creditsHeading]}>Open-Sourced Libraries and Frameworks</Text>
-            <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>React Native</Text>
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Expo APIs</Text>
-            <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Reanimated 2</Text>
+            <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>React Native</Text>
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>React Native Gesture Handler</Text>
+            <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Reanimated 2</Text>
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>React Navigation</Text>
+            <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>React Native Community : NetInfo</Text>
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Date-Fns</Text>
             <Text style={[global_styles.bodyCaption, settings_style.creditsText]}>Axios</Text>
 

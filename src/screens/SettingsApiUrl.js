@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import React, { useContext, useState } from 'react';
 import { Alert, Image, Text, TouchableHighlight, View } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
+import AppConfig from '../AppConfig';
 import { appColors } from '../common';
 import global_styles from '../styles/global_styles';
 import settings_style from '../styles/settings_style';
-import * as SecureStore from 'expo-secure-store';
-import AppConfig from '../AppConfig';
 
 export default function({route, navigation}){
     const [s_config, setConfigState] = useContext(AppConfig);
@@ -22,10 +22,16 @@ export default function({route, navigation}){
 
     function changeApiUrl(){
         //attempt to set the value in SecureStore first
-        SecureStore.setItemAsync('API_MAIN_URL', s_api_url).then(r => {
+        SecureStore.setItemAsync('API_MAIN_URL', s_api_url).then(async r => {
 
             //then update the value in s_config if SecureStore was successful
             const s_config_copy = {...s_config};
+
+            //check the network
+            if(s_config_copy.env.API_URL === s_config_copy.env.API_MAIN_URL){ //only set this if the API_URL was the MAIN_URL
+                s_config_copy.env.API_URL = s_api_url;
+            }
+
             s_config_copy.env.API_MAIN_URL = s_api_url;
             setConfigState(s_config_copy);
 
@@ -62,8 +68,8 @@ export default function({route, navigation}){
                 onChangeText={next => setApiUrlState(next.trim())} />
 
             <TouchableHighlight 
-                style={[s_api_url === s_config.env.API_URL ? global_styles.primaryButtonDisabled : global_styles.primaryButton, {alignSelf:'center', marginTop:10}]} 
-                disabled={s_api_url === s_config.env.API_URL}
+                style={[s_api_url === s_config.env.API_MAIN_URL ? global_styles.primaryButtonDisabled : global_styles.primaryButton, {alignSelf:'center', marginTop:10}]} 
+                disabled={s_api_url === s_config.env.API_MAIN_URL}
                 activeOpacity={0.6}
                 underlayColor={appColors.main2}
                 onPress={changeApiUrl}>

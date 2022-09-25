@@ -26,6 +26,12 @@ export default function({route, navigation}){
 
             //then update the value in s_config if SecureStore was successful
             const s_config_copy = {...s_config};
+
+            //check the network
+            if(s_config_copy.env.API_URL === s_config_copy.env.API_FALLBACK_URL){ //only set this if the API_URL was the FALLBACK_URL
+                s_config_copy.env.API_URL = s_api_fallback_url;
+            }
+
             s_config_copy.env.API_FALLBACK_URL = s_api_fallback_url;
             setConfigState(s_config_copy);
 

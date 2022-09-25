@@ -38,7 +38,9 @@ import SettingsApiUrl from './src/screens/SettingsApiUrl';
 import SettingsApiFallbackUrl from './src/screens/SettingsApiFallbackUrl';
 import SettingsCredits from './src/screens/SettingsCredits';
 import Axios from 'axios';
+import NetInfo from '@react-native-community/netinfo';
 
+let abort_controller;
 const {Screen, Navigator} = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
@@ -137,17 +139,64 @@ export default function App() {
       setConfigState(s_config_copy);
     }
 
+    /** Add an event listener to monitor network changes.
+     * This function runs atleast once after the app has loaded, and runs whenever the network state changes.
+     * This function also runs asynchronously to the other instructions in this useEffect();
+     *  i.e setConfigState() runs before this function's body when placed inside init();
+     * 
+     * We moved it outside to run before init() because of this async property.
+     * 
+     * For some reason, this function also runs three (3) times whenever the WiFi is turned off, 
+     * so we should use an AbortController() to avoid sending multiple GET requests
+     * UPDATE: It seems this function is called everytime a network switch is made, so only calling this when the net_state isConnected makes it work as expected
+     */
+    NetInfo.addEventListener(net_state => {
+      /** By the time this function body executes, s_config.env will either be undefined -- meaning it ran on init, 
+       * or it will have values already -- meaning it ran on network change
+       */
+      async function checkNetwork(){
+        const s_config_copy = {...s_config};
+
+        const headers = {};
+        headers[s_config_copy.env.API_KEY_HEADER_NAME] = s_config_copy.env.API_KEY;
+
+        const promise_array = [
+          Axios.get(s_config_copy.env.API_MAIN_URL, {headers:headers, timeout:1000}),
+          Axios.get(s_config_copy.env.API_FALLBACK_URL, {headers:headers, timeout:1000}),
+        ];
+
+        try{
+          const response = await Promise.race(promise_array);
+          if(response.status === 200){
+            s_config_copy.env.API_URL = response.config.url;
+            setConfigState(s_config_copy); //update the state and re-render
+          }
+          else throw new Error(`promise resolved with status ${response.status}`);
+        }
+        catch(e){
+          Alert.alert('Network Error', `The app could not connect to the backend server. Please make sure your internet connection is working and that your API Key and URLs are not set incorrectly. If this problem persists, please contact the developer about this issue. \n ${e}`, [{text:'OK'}]);
+        }
+      }
+
+      //check the network only when a Fallback URL is defined and the client is connected to a network
+      if(s_config.env.API_FALLBACK_URL !== undefined && net_state.type !== 'none' && net_state.isConnected){
+        checkNetwork();
+      }
+    });
+
+    //initialize the app
     init();
   }, []);
 
-  useEffect(() => {
-    if(fonts_loaded && s_config.env.INITIALIZED !== undefined && s_config.env.API_URL !== undefined){
-      SplashScreen.hideAsync().then(() => {
-        setLoadedState(true);
-      });
+  useEffect(() => { //run this side-effect whenever fonts are loaded or s_config.env.INITIALIZED 
+    if(fonts_loaded && s_config.env.INITIALIZED !== undefined){
+      SplashScreen.hideAsync();
+      setLoadedState(true);
     }
 
   }, [fonts_loaded, s_config.env.INITIALIZED, s_config.env.API_URL]);
+
+  //event-handlers
 
   if(!s_loaded) return null; //return nothing until the app is loaded
   else return (
