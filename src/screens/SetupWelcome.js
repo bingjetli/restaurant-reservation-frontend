@@ -32,13 +32,13 @@ export default function({route, navigation}){
         <View style={[global_styles.fullCenteringView, setup_styles.bodyView]} >
             <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Welcome!</Text>
             <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Before you get started, we need to configure a few settings in order to connect with the server.</Text>
-            {/*<Text style={[global_styles.bodyText, setup_styles.bodyText]} >These can be changed later in the Settings Menu.</Text>*/}
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >These can be changed later in the Settings Menu.</Text>
         </View>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
                 style={global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.main4}
+                underlayColor={appColors.main2}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>

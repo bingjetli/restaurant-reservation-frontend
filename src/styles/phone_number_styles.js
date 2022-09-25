@@ -6,7 +6,7 @@ export default StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-around',
         alignItems:'center',
-        borderColor:appColors.main3,
+        borderColor:appColors.main,
         borderWidth:1,
         borderRadius:5,
         minHeight:50,
@@ -18,12 +18,12 @@ export default StyleSheet.create({
     invisibleTextBox:{
         fontSize:22,
         fontFamily:'PTSans-Regular',
-        color:appColors.main3,
+        color:appColors.main,
         textAlign:'center',
     },
     falseTextBoxText:{
         fontSize:22,
         fontFamily:'PTSans-Regular',
-        color:appColors.main3,
+        color:appColors.main,
     },
 });

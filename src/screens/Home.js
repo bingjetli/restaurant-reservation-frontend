@@ -51,7 +51,6 @@ export default function({route, navigation}){
             <View style={home_styles.headerView}>
                 <View style={home_styles.headerLogoView} >
                     <Image style={home_styles.headerLogo} source={VuLogo} />
-                    {width > 600 && <Text style={home_styles.headerLogoText} >Reservations</Text>}
                 </View>
 
                 <View style={global_styles.fullCenteringView}>
@@ -65,39 +64,6 @@ export default function({route, navigation}){
                 </View>
 
                 <View style={home_styles.controlsView}>
-                    {/*width > 600 ? <TouchableHighlight //magic-number
-                        style={global_styles.labeledIconButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={addReservation} >
-                        <>
-                            <Text style={global_styles.labeledIconButtonText} >Add Reservation</Text>
-                            <Image style={global_styles.iconButtonImage} source={AddIcon} />
-                        </>
-                    </TouchableHighlight> : <TouchableHighlight
-                        style={global_styles.iconButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={addReservation} >
-                            <Image style={global_styles.iconButtonImage} source={AddIcon} />
-                    </TouchableHighlight>*/}
-                    {/*width > 600 ? <TouchableHighlight //magic-number
-                        style={global_styles.labeledIconButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={openSettings} >
-                        <>
-                            <Text style={global_styles.labeledIconButtonText} >Settings</Text>
-                            <Image style={global_styles.iconButtonImage} source={SettingsIcon} />
-                        </>
-                    </TouchableHighlight> : <TouchableHighlight
-                        style={global_styles.iconButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={openSettings} >
-                            <Image style={global_styles.iconButtonImage} source={SettingsIcon} />
-                    </TouchableHighlight>*/}
-
                     <TouchableHighlight
                         style={global_styles.iconButton} 
                         activeOpacity={0.6}

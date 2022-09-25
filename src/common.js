@@ -1,144 +1,23 @@
 export const appColors = {
-    //https://paletton.com/#uid=50u0u0keTzI6fSjaBJliSthmupq
+    text:'#595959',
+    text2:'#808080',
+    text3:'#a6a6a6',
+    text4:'#cccccc',
 
-    text:'#1F1F20',
-    text2:'#5D5E5F',
-    text3:'#9B9D9E',
-    text4:'#C3C4C5',
-    text5:'#EBEBEC',
+    content:'#f2f2f2',
+    content2:'#e6e6e6',
+    content3:'#d9d9d9',
+    content4:'#cccccc',
+    content5:'#bfbfbf',
 
-    content:'#fffdfb',
-    content2:'#f0ece9',
-    content3:'#d8d3cf',
-    content4:'#c2bcb6',
-    content5:'#aea69e',
+    main:'#538AA6',
+    main2:'#66AACC',
 
-    main:'#324C88',
-    main2:'#4A639C',
-    main3:'#6980B5',
-    main4:'#93A5D1',
-    main5:'#C0CCE8',
+    success:'#53A665',
+    warning:'#A68E53',
+    danger:'#A65353',
 
-    success:'#30A230',
-    success2:'#4DBB4D',
-    success3:'#70D270',
-    success4:'#98E398',
-    success5:'#C2F1C2',
-
-    warning:'#CB7D3C',
-    warning2:'#E99E60',
-    warning3:'#FFBE88',
-    warning4:'#FFD1AB',
-    warning5:'#FFE4CD',
-
-    danger:'#CB3C3C',
-    danger2:'#E96060',
-    danger3:'#FF8888',
-    danger4:'#FFABAB',
-    danger5:'#FFCDCD',
-
-    inactive:'#e2e2e9',
-
-    //deprecated
-    mainComplementary1:'#80C0FF',
-    mainComplementary2:'#4DA7FF',
-    mainComplementary3:'#FF9D1E',
-    mainComplementary4:'#FFB24D',
-    mainTetrad1:'#FF8B1E',
-    mainTetrad2:'#FF1E92',
-    mainTetrad3:'#75BBFF',
-    mainTetrad4:'#92FF1E',
-
-    mainText:'#2F4F4F',
-    secondaryText:'#808080',
-    secondaryText2:'#aaaaaa',
-    mainTextInvert:'#F8F8FF',
-
-    iosSystemWhite:{
-        light:'#fafaff',
-        dark:'#101012',
-    },
-    iosSystemBlack:{
-        light:'#101012',
-        dark:'#fafaff',
-    },
-    iosSystemGray0:{
-        light:'#636366',
-        dark:'#aeaeb2',
-    },
-    iosSystemGray:{
-        light:'#8e8e93',
-        dark:'#8e8e93',
-    },
-    iosSystemGray2:{
-        light:'#aeaeb2',
-        dark:'#636366',
-    },
-    iosSystemGray3:{
-        light:'#c7c7cc',
-        dark:'#48484a',
-    },
-    iosSystemGray4:{
-        light:'#d1d1d6',
-        dark:'#3a3a3c',
-    },
-    iosSystemGray5:{
-        light:'#e5e5ea',
-        dark:'#2c2c2e',
-    },
-    iosSystemGray6:{
-        light:'#f2f2f7',
-        dark:'#1c1c1e',
-    },
-
-    iosSystemRed:{
-        light:'#ff3b30',
-        dark:'#ff453a',
-    },
-    iosSystemOrange:{
-        light:'#ff9500',
-        dark:'#ff9f0a',
-    },
-    iosSystemYellow:{
-        light:'#ffcc00',
-        dark:'#ffd60a',
-    },
-    iosSystemGreen:{
-        light:'#34c759',
-        dark:'#30d158',
-    },
-    iosSystemMint:{
-        light:'#00c7be',
-        dark:'#66d4cf',
-    },
-    iosSystemTeal:{
-        light:'#30b0c7',
-        dark:'#40c8e0',
-    },
-    iosSystemCyan:{
-        light:'#32ade6',
-        dark:'#64d2ff',
-    },
-    iosSystemBlue:{
-        light:'#007aff',
-        dark:'#0a84ff',
-    },
-    iosSystemIndigo:{
-        light:'#5856d6',
-        dark:'#5e5ce6',
-    },
-    iosSystemPurple:{
-        light:'#af52de',
-        dark:'#bf5af2',
-    },
-    iosSystemPink:{
-        light:'#ff2d55',
-        dark:'#ff375f',
-    },
-    iosSystemBrown:{
-        light:'#a2845e',
-        dark:'#ac8e68',
-    },
+    inactive:'#D9D9D9',
 };
 
 export const appSizes = {

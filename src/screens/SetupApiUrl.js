@@ -22,8 +22,9 @@ export default function({route, navigation}){
     }
 
     function goToNextScreen(){
-        SecureStore.setItemAsync('API_URL', s_api_url).then(r => {
+        SecureStore.setItemAsync('API_MAIN_URL', s_api_url).then(r => {
             const s_config_copy = {...s_config};
+            s_config_copy.env.API_MAIN_URL = s_api_url;
             s_config_copy.env.API_URL = s_api_url;
             setConfigState(s_config_copy);
 
@@ -72,7 +73,7 @@ export default function({route, navigation}){
                 style={s_api_url.length < 19 ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
                 disabled={s_api_url.length < 19}
                 activeOpacity={0.6}
-                underlayColor={appColors.main4}
+                underlayColor={appColors.main2}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>

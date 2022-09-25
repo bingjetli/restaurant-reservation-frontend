@@ -66,19 +66,19 @@ export default function({route, navigation}){
         <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
             <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Name</Text>
             <Text style={[global_styles.bodyText, setup_styles.bodyText]} >You may change the name of the person associated with this reservation.</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This should be a minimum of three (3) letters.</Text>
             <TextInput 
                 style={[global_styles.textBox, setup_styles.bodyTextBox]} 
                 value={s_name} 
                 onPressIn={() => setNameState('')}
                 onChangeText={next => setNameState(next)} 
                 ref={r_textbox} />
+            <Text style={[global_styles.bodyCaption, setup_styles.bodyCaption]} >This should be a minimum of three (3) letters.</Text>
         </View>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
                 style={s_name.length < 3 ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.main4}
+                underlayColor={appColors.main2}
                 onPress={goToNextScreen} 
                 disabled={s_name.length < 3}>
                 <Text style={global_styles.primaryButtonText}>Change Name</Text>

@@ -42,13 +42,13 @@ export default StyleSheet.create({
     headerBackButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:22.5,
-        color:appColors.main3,
+        color:appColors.main,
         marginLeft:-5,
     },
     headerBackButtonIcon:{
         width:25,
         height:25,
-        tintColor:appColors.main3,
+        tintColor:appColors.main,
     },
     headerText:{
         fontFamily:'PTSans-Regular',
@@ -86,7 +86,7 @@ export default StyleSheet.create({
         textAlign:'center',
     },
     primaryButton:{
-        backgroundColor:appColors.main3,
+        backgroundColor:appColors.main,
         maxWidth:400,
         minHeight:50,
         minWidth:50,
@@ -106,7 +106,7 @@ export default StyleSheet.create({
     secondaryButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:appColors.main3,
+        color:appColors.main,
         textAlign:'center',
     },
     secondaryButton:{
@@ -120,9 +120,9 @@ export default StyleSheet.create({
     textBox:{
         fontFamily:'PTSans-Regular',
         fontSize:22.5,
-        color:appColors.main3,
+        color:appColors.main,
         textAlign:'center',
-        borderColor:appColors.main3,
+        borderColor:appColors.main,
         borderWidth:1,
         borderRadius:5,
         padding:10,
@@ -130,7 +130,7 @@ export default StyleSheet.create({
     iconButtonImage:{
         height:25,
         width:25,
-        tintColor:appColors.main3,
+        tintColor:appColors.main,
     },
     iconButton:{
         minHeight:50,
@@ -151,7 +151,7 @@ export default StyleSheet.create({
     labeledIconButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:appColors.main3,
+        color:appColors.main,
         marginRight:5,
     },
     actionSheetModalView:{

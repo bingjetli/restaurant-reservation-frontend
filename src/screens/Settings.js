@@ -6,18 +6,23 @@ import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
 import { appColors } from '../common';
 import global_styles from '../styles/global_styles';
 import settings_style from '../styles/settings_style';
+import RouterIcon from '../../assets/icons/router.png';
+import InfoIcon from '../../assets/icons/info.png';
 
 export default function({route, navigation}){
     //event-handlers
     function returnToHomeScreen(){
         navigation.popToTop();
     }
-    function goToNextScreen(){
-        /*
+    function goToAPISettings(){
         navigation.navigate({
-            name:'create-date',
+            name:'settings-api',
         });
-        */
+    }
+    function goToCredits(){
+        navigation.navigate({
+            name:'settings-credits',
+        });
     }
 
     return (<SafeAreaView style={[global_styles.fullView, settings_style.mainView]}>
@@ -41,20 +46,26 @@ export default function({route, navigation}){
                 style={settings_style.settingButton}
                 activeOpacity={0.6}
                 underlayColor={appColors.content2}
-                onPress={() => null}>
+                onPress={goToAPISettings}>
                 <>
-                    <Text style={[global_styles.bodySubHeading, settings_style.bodySubHeading]}>Configure Backend</Text>
-                    <Text style={[global_styles.bodyText, settings_style.bodyText]}>View settings related to connecting to the API</Text>
+                    <Image style={[global_styles.iconButtonImage, settings_style.settingButtonIcon]} source={RouterIcon} />
+                    <View>
+                        <Text style={[global_styles.bodyText, settings_style.settingButtonText]}>Configure Backend</Text>
+                        <Text style={[global_styles.bodyCaption, settings_style.settingButtonCaption]}>View settings related to connecting to the API</Text>
+                    </View>
                 </>
             </TouchableHighlight>
             <TouchableHighlight
                 style={settings_style.settingButton}
                 activeOpacity={0.6}
                 underlayColor={appColors.content2}
-                onPress={() => null}>
+                onPress={goToCredits}>
                 <>
-                    <Text style={[global_styles.bodySubHeading, settings_style.bodySubHeading]}>About App</Text>
-                    <Text style={[global_styles.bodyText, settings_style.bodyText]}>View developer information about this app</Text>
+                    <Image style={[global_styles.iconButtonImage, settings_style.settingButtonIcon]} source={InfoIcon} />
+                    <View>
+                        <Text style={[global_styles.bodyText, settings_style.settingButtonText]}>About App</Text>
+                        <Text style={[global_styles.bodyCaption, settings_style.settingButtonCaption]}>View developer information about this app</Text>
+                    </View>
                 </>
             </TouchableHighlight>
         </ScrollView>

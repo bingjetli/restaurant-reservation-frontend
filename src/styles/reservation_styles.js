@@ -15,16 +15,16 @@ export default StyleSheet.create({
         marginLeft:10,
     },
     totalGuestsText:{
-        color:appColors.text2,
+        color:appColors.text,
         fontFamily:'PTSans-Regular',
         marginRight:10,
     },
     statusText:{
-        color:appColors.text4,
+        color:appColors.text3,
         textAlign:'center',
     },
     statusView:{
-        minHeight:50,
+        minHeight:100,
     },
     reservationView:{
         paddingHorizontal:10,
@@ -41,6 +41,7 @@ export default StyleSheet.create({
         paddingVertical:10,
         borderColor:appColors.content3,
         borderWidth:1,
+        borderStyle:'dashed'
     },
     reservationHeaderView:{
         flexDirection:'row',
@@ -50,20 +51,27 @@ export default StyleSheet.create({
     reservationHeaderText:{
         fontFamily:'PTSans-Regular',
         marginHorizontal:10,
+        textAlign:'center',
         textTransform:'capitalize',
-        color:appColors.text2,
+        color:appColors.text,
     },
     reservationBodyText:{
         fontFamily:'PTSans-Regular',
-        color:appColors.text4,
+        color:appColors.text3,
         marginHorizontal:10,
+    },
+    guestsIconImage:{
+        tintColor:appColors.text3,
+    },
+    totalGuestsIconImage:{
+        tintColor:appColors.text,
     },
     reservationBodyView:{
         marginTop:5,
         marginHorizontal:10,
     },
     reservationNotesText:{
-        color:appColors.text4,
+        color:appColors.text3,
     },
     reservationFooterButton:{
         minHeight:50,
@@ -72,15 +80,15 @@ export default StyleSheet.create({
         paddingHorizontal:10,
     },
     presentButtonSelected:{
-        tintColor:appColors.success3,
+        tintColor:appColors.success,
     },
     presentButtonSelectedText:{
-        color:appColors.success3,
+        color:appColors.success,
     },
     absentButtonSelected:{
-        tintColor:appColors.warning3,
+        tintColor:appColors.warning,
     },
     absentButtonSelectedText:{
-        color:appColors.warning3,
+        color:appColors.warning,
     },
 });

@@ -8,6 +8,7 @@ import PersonIcon from '../assets/icons/person.png';
 import PersonFilledIcon from '../assets/icons/person_filled.png';
 import PersonOffIcon from '../assets/icons/person_off.png';
 import PersonOffFilledIcon from '../assets/icons/person_off_filled.png';
+import GroupIcon from '../assets/icons/group.png';
 import AppConfig from './AppConfig';
 import { appColors, getTimeString, parse24HourTimeString } from './common';
 import global_styles from './styles/global_styles';
@@ -181,14 +182,15 @@ export default function({item}){
                     <Text style={global_styles.secondaryButtonText}>Cancel</Text>
                 </TouchableHighlight>
                 <Animated.View style={global_styles.actionSheetContentView} entering={FadeInDown} exiting={FadeOutDown}>
-                    <View style={[global_styles.horizontalView, {marginVertical:10}]}>
-                        <View style={{flex:1, alignItems:'flex-end'}}>
-                            <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText, {marginRight:5}]}>{item.name}</Text>
+                    <View style={[{marginVertical:10, width:'100%'}]}>
+                        <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText]}>{item.name}</Text>
+                        <View style={[global_styles.horizontalView, {justifyContent:'space-around'}]}>
                             <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText, {marginRight:5}]}>{getTimeString(parse24HourTimeString(item.time), true)}</Text>
-                        </View>
-                        <View style={{flex:1}}>
-                            <Text style={[global_styles.bodyText, reservation_styles.reservationHeaderText, {textTransform:'uppercase', marginLeft:5}]}>{item.phoneNumber}</Text>
-                            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText, {marginLeft:5}]}>{item.seats} Guests</Text>
+                            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText, {textTransform:'uppercase', marginLeft:5}]}>{item.phoneNumber}</Text>
+                            <View style={[global_styles.horizontalCenteringView]}>
+                                <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.seats}</Text>
+                                <Image style={[global_styles.iconButtonImage, reservation_styles.guestsIconImage]} source={GroupIcon} />
+                            </View>
                         </View>
                     </View>
                     <View style={global_styles.actionSheetContentDivider} />
@@ -252,7 +254,7 @@ export default function({item}){
                         activeOpacity={0.6}
                         underlayColor={appColors.content2}
                         onPress={deleteReservation}>
-                        <Text style={[global_styles.secondaryButtonText, {color:appColors.danger3}]} >Delete</Text>
+                        <Text style={[global_styles.secondaryButtonText, {color:appColors.danger}]} >Delete</Text>
                     </TouchableHighlight>
                 </Animated.View>
             </View>
@@ -269,7 +271,10 @@ export default function({item}){
         </View>
         <View style={reservation_styles.reservationHeaderView}>
             <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.phoneNumber}</Text>
-            <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.seats} Guests</Text>
+            <View style={[global_styles.horizontalCenteringView, {marginRight:10}]}>
+                <Text style={[global_styles.bodyText, reservation_styles.reservationBodyText]} >{item.seats}</Text>
+                <Image style={[global_styles.iconButtonImage, reservation_styles.guestsIconImage]} source={GroupIcon} />
+            </View>
         </View>
 
         <View style={reservation_styles.reservationBodyView}>

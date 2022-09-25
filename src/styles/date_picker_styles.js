@@ -43,7 +43,7 @@ export default StyleSheet.create({
         fontFamily:'PTSansCaption-Regular',
         fontSize:13.5,
         textAlign:'center',
-        color:appColors.text4,
+        color:appColors.text3,
     },
     dateView:{
         width:'14.28%',
@@ -64,12 +64,12 @@ export default StyleSheet.create({
         borderRadius:25,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:appColors.main3,
+        backgroundColor:appColors.main,
     },
     dateButtonText:{
         fontFamily:'PTSans-Regular',
         fontSize:18,
-        color:appColors.main3,
+        color:appColors.main,
     },
     dateButtonTextSelected:{
         fontFamily:'PTSans-Regular',
@@ -91,7 +91,7 @@ export default StyleSheet.create({
         fontFamily:'PTSans-Regular',
         fontSize:18,
         textAlign:'center',
-        color:appColors.main3,
+        color:appColors.main,
     },
     modalView:{
         alignItems:'center',

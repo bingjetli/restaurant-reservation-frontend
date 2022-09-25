@@ -1,14 +1,17 @@
 import Axios from 'axios';
 import { formatISO } from 'date-fns';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Text, View } from 'react-native';
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import GroupIcon from '../assets/icons/group.png';
 import AppConfig from './AppConfig';
 import { appColors, getTimeString, parse24HourTimeString } from './common';
 import Reservation from './Reservation';
 import global_styles from './styles/global_styles';
 import reservation_styles from './styles/reservation_styles';
+
+let abort_controller; //this variable is accessible from every other instance of this component, luckily there should only be one of these active at any moment.
 
 export default function({date, onSwipeLeft, onSwipeRight, onPress}){
     const [s_config, setConfigState] = useContext(AppConfig);
@@ -39,17 +42,20 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
 
     }, [s_reservations_by_time]);
 
+    useMemo(() => { //run this whenever date changes, but before useEffect[date] runs
+        if(s_is_fetching) if(abort_controller) abort_controller.abort(); //make sure the previous request is canceled before starting a new one, this fixes some jank while quickly swiping the viewer
+        setHasReservationsState(false); //hide the previous reservations while we fetch the new reservations
+        setIsFetchingState(true); //set fetching state to true
+    }, [date]);
+
     //side-effects
     useEffect(() => { //run this whenever date changes
-        setIsFetchingState(true);
-
         const url = s_config.env.API_URL + '/reservations?startDate=' + formatISO(date, {representation:'date'});
         const headers = {};
         headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
-
-        //Alert.alert('Fetching...', `fetching from ${url} with ${process.env.API_KEY_HEADER_NAME}:${process.env.API_KEY}`, [{text:'OK'}]);
         
-        Axios.get(url, {headers:headers}).then(r => {
+        abort_controller = new AbortController();
+        Axios.get(url, {headers:headers, signal:abort_controller.signal}).then(r => {
             if(r.data.result === 'not_found'){
                 setIsFetchingState(false);
                 setHasReservationsState(false);
@@ -73,6 +79,8 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
             else if(r.data.result === 'error_occured'){
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
             }
+        }).catch(e => {
+            console.log(e);
         });
     }, [date]);
 
@@ -87,24 +95,22 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
             ],
         };
     });
-    const g_pan_handler = Gesture.Pan().runOnJS(true)
+    const g_pan_handler_ui = Gesture.Pan()
     .onUpdate(e => {
         sv_x_offset.value = e.translationX;
-        sv_opacity.value = (200 - Math.abs(e.translationX)) / 200;
+        sv_opacity.value = (s_config.screen.width / 2 - Math.abs(e.translationX)) / (s_config.screen.width / 2); //opacity is a ratio of how far the screen has traveled from the center over the width of the screen
     })
     .onEnd(e => {
-        if(Math.abs(e.velocityX) > Math.abs(e.velocityY)){ //run this comparison once
-            if(e.velocityX > 500 || e.translationX > 200){
-                sv_x_offset.value = -250;
+        if(Math.abs(e.translationX) > Math.abs(e.translationY)){ //run this comparison once
+            if(e.velocityX > 500 || e.translationX > s_config.screen.width * 0.25){
+                sv_x_offset.value = s_config.screen.width / -2;
                 sv_opacity.value = withTiming(1, {duration:250});
                 sv_x_offset.value = withTiming(0, {duration:250});
-                onSwipeRight();
             }
-            else if(e.velocityX < -500 || e.translationX < -200){
-                sv_x_offset.value = 250;
+            else if(e.velocityX < -500 || e.translationX < s_config.screen.width * -0.25){
+                sv_x_offset.value = s_config.screen.width / 2;
                 sv_opacity.value = withTiming(1, {duration:250});
                 sv_x_offset.value = withTiming(0, {duration:250});
-                onSwipeLeft();
             }
             else{
                 //interpolate component back to normal, if swipe gesture isn't fully detected
@@ -118,14 +124,28 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
             sv_x_offset.value = withTiming(0, {duration:250});
         }
     });
+    const g_pan_handler_js = Gesture.Pan().runOnJS(true)
+    .onEnd(e => {
+        if(Math.abs(e.translationX) > Math.abs(e.translationY)){ //run this comparison once
+            if(e.velocityX > 500 || e.translationX > s_config.screen.width * 0.25){
+                onSwipeRight();
+            }
+            else if(e.velocityX < -500 || e.translationX < s_config.screen.width * -0.25){
+                onSwipeLeft();
+            }
+        }
+    });
 
-    return (<GestureDetector gesture={g_pan_handler}>
+    return (<GestureDetector gesture={Gesture.Simultaneous(g_pan_handler_js, g_pan_handler_ui)}>
         <Animated.View style={[global_styles.fullView, as_main_view, {maxWidth:'100%', width:'100%', alignSelf:'center'}]} onStartShouldSetResponder={onPress}>
             <ScrollView>
                 {s_has_reservations && Object.keys(s_reservations_by_time).sort().map(time_section => <View key={time_section}>
                     <View style={reservation_styles.sectionHeaderView} >
                         <Text style={[global_styles.bodySubHeading, reservation_styles.timeText]}>{getTimeString(parse24HourTimeString(time_section), true)}</Text>
-                        <Text style={[global_styles.bodyText, reservation_styles.totalGuestsText]} >Total Guests: {c_reservation_by_time_total_guests[time_section]}</Text>
+                        <View style={[global_styles.horizontalCenteringView, {marginRight:15}]}>
+                            <Text style={[global_styles.bodyText, reservation_styles.totalGuestsText]} >{c_reservation_by_time_total_guests[time_section]} TOTAL</Text>
+                            <Image style={[global_styles.iconButtonImage, reservation_styles.totalGuestsIconImage]} source={GroupIcon} />
+                        </View>
                     </View>
                     <View style={reservation_styles.reservationView}>
                         {s_reservations_by_time[time_section].map(reservation => <Reservation
@@ -135,8 +155,8 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                     </View>
                 </View>)}
                 <View style={[global_styles.centeringView, reservation_styles.statusView]}>
-                    <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_is_fetching ? 'Fetching reservations...' : 'That\'s all folks!'}</Text>
-                    {s_is_fetching && <ActivityIndicator color={appColors.main3} size='large' />}
+                    <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_is_fetching ? 'Fetching reservations...' : 'That' + '’' + 's all folks!'}</Text>
+                    {s_is_fetching && <ActivityIndicator color={appColors.main} size='large' />}
                 </View>
             </ScrollView>
         </Animated.View>

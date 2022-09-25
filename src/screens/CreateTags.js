@@ -59,14 +59,15 @@ export default function({route, navigation}){
         </View>
         <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
             <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Tags</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is optional, but did you want to specify any Tags for this Reservation?</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is optional, but you can choose to specify tags for this reservation.</Text>
             <TagPicker tagData={s_config.tagData} selected={s_tags} onSelect={selectTag} />
+            <Text style={[global_styles.bodyCaption, setup_styles.bodyCaption, {textAlign:'center'}]} >Pressing on a tag will toggle it on and off for this reservation.</Text>
         </View>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
                 style={global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.main4}
+                underlayColor={appColors.main2}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>

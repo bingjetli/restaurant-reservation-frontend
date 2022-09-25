@@ -70,7 +70,7 @@ export default function({route, navigation}){
             <TouchableHighlight 
                 style={global_styles.primaryButton} 
                 activeOpacity={0.6}
-                underlayColor={appColors.main4}
+                underlayColor={appColors.main2}
                 onPress={goToNextScreen}>
                 <Text style={global_styles.primaryButtonText}>Update Notes</Text>
             </TouchableHighlight>

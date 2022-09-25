@@ -14,6 +14,8 @@ import global_styles from './styles/global_styles';
 import Axios from 'axios';
 import AppConfig from './AppConfig';
 
+let abort_controller; //this is shared with all instances of this component, but it should be fine since we should only have one of these active at any given point in time
+
 export default function({date, onSelect, isVisible}){
     const {height, width} = useWindowDimensions();
     const [s_config, setConfigState] = useContext(AppConfig);
@@ -30,6 +32,11 @@ export default function({date, onSelect, isVisible}){
         });
         
         return dates_array;
+    }, [date]);
+
+    useMemo(() => {
+        //cancel the previous request before running the current one
+        if(abort_controller) abort_controller.abort();
     }, [date]);
 
     //side-effects
@@ -61,6 +68,7 @@ export default function({date, onSelect, isVisible}){
 
     //helper-functions
     function fetchReservationData(){
+
         //we'll only fetch the data if the month or year changed
         if(getMonth(s_reservation_data.date) !== getMonth(date) || getYear(s_reservation_data.date) !== getYear(date)){
             //if the month or year from the cached reservation data is not the same as the current date, run the get request
@@ -68,7 +76,10 @@ export default function({date, onSelect, isVisible}){
             const headers = {};
             headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
 
-            Axios.get(url, {headers:headers}).then(r => {
+            //reset the abort_controller
+            abort_controller = new AbortController();
+
+            Axios.get(url, {headers:headers, signal:abort_controller.signal}).then(r => {
                 const reservation_data = {
                     date:date,
                     total_guests:{},
@@ -93,15 +104,14 @@ export default function({date, onSelect, isVisible}){
                 else if(r.data.result === 'error_occured'){
                     Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
                 }
+            }).catch(e => {
+                console.log(e);
             });
         }
     }
 
     //gestures-and-animations
     //---shared-values
-    const sv_picker_max_height = useSharedValue(0);
-    const sv_picker_opacity = useSharedValue(0);
-    const sv_picker_paddingBottom = useSharedValue(0);
     const sv_calendar_xoffset = useSharedValue(0);
     const sv_calendar_opacity = useSharedValue(1);
 
@@ -116,27 +126,14 @@ export default function({date, onSelect, isVisible}){
     });
     const as_picker_view = useAnimatedStyle(() => {
         return {
-            maxHeight:`${sv_picker_max_height.value}%`,
-            opacity:sv_picker_opacity.value,
-            paddingBottom:sv_picker_paddingBottom.value,
+            maxHeight:withTiming(isVisible ? 500 : 0, {duration:250}),
+            opacity: withTiming(isVisible ? 1 : 0, {duration: 250}),
+            paddingBottom: withTiming(isVisible ? 20 : 0, {duration:250}),
             overflow:'hidden',
         };
     });
 
-    useEffect(() => { //run this whenever the picker visibility changes
-        if(isVisible){
-            sv_picker_max_height.value = withTiming(100, {duration:250});
-            sv_picker_opacity.value = withTiming(1, {duration:125});
-            sv_picker_paddingBottom.value = withTiming(20, {duration:250});
-        }
-        else{
-            sv_picker_max_height.value = withTiming(0, {duration:250});
-            sv_picker_opacity.value = withTiming(0, {duration:125});
-            sv_picker_paddingBottom.value = withTiming(0, {duration:250});
-        }
-    }, [isVisible]);
-
-    const g_pan_handler = Gesture.Pan().runOnJS(true)
+    const g_pan_handler_ui = Gesture.Pan()
     .onUpdate(e => {
         sv_calendar_xoffset.value = e.translationX;
         sv_calendar_opacity.value = (200 - Math.abs(e.translationX)) / 200;
@@ -148,13 +145,11 @@ export default function({date, onSelect, isVisible}){
                 sv_calendar_xoffset.value = -250;
                 sv_calendar_opacity.value = withTiming(1, {duration:250});
                 sv_calendar_xoffset.value = withTiming(0, {duration:250});
-                previousMonth();
             }
             else if(e.velocityX < -500 || e.translationX < -200){
                 sv_calendar_xoffset.value = 250;
                 sv_calendar_opacity.value = withTiming(1, {duration:250});
                 sv_calendar_xoffset.value = withTiming(0, {duration:250});
-                nextMonth();
             }
             else{
                 //interpolate component back to normal, if swipe gesture isn't fully detected
@@ -168,12 +163,24 @@ export default function({date, onSelect, isVisible}){
             sv_calendar_xoffset.value = withTiming(0, {duration:250});
         }
     });
+    const g_pan_handler_js = Gesture.Pan().runOnJS(true)
+    .onEnd(e => {
+        if(Math.abs(e.velocityX) > Math.abs(e.velocityY)){ //run this comparison once
+            //horizontal gesture detected
+            if(e.velocityX > 500 || e.translationX > 200){
+                previousMonth();
+            }
+            else if(e.velocityX < -500 || e.translationX < -200){
+                nextMonth();
+            }
+        }
+    });
 
     return(<View style={{flexDirection:'row-reverse', backgroundColor:appColors.content, justifyContent:'center', borderBottomColor:appColors.content3, borderBottomWidth:1}}>
 
         {width / 400 >= 1.5 && <Animated.View style={[{flex:1, justifyContent:'center', alignItems:'center'}, as_picker_view]}>
-            <Text style={{color:appColors.text4, fontSize:150, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
-            <Text style={{color:appColors.text4, fontSize:45, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
+            <Text style={{color:appColors.text4, fontSize:125, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
+            <Text style={{color:appColors.text4, fontSize:25, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
         </Animated.View>}
 
         <Animated.View style={[date_picker_styles.pickerMainView, as_picker_view]}>
@@ -234,7 +241,7 @@ export default function({date, onSelect, isVisible}){
                     <Image style={global_styles.iconButtonImage} source={s_show_total_guests ? GroupFilledIcon : GroupIcon} />
                 </TouchableHighlight>
             </View>
-            <GestureDetector gesture={g_pan_handler}>
+            <GestureDetector gesture={Gesture.Simultaneous(g_pan_handler_ui, g_pan_handler_js)}>
                 <Animated.View style={[date_picker_styles.calendarView, as_calendar_view]}>
                     <Text style={date_picker_styles.dayNameText}>Sun</Text>
                     <Text style={date_picker_styles.dayNameText}>Mon</Text>

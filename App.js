@@ -4,8 +4,8 @@ import { useFonts } from 'expo-font';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useMemo, useState } from 'react';
-import { Alert } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Alert, useWindowDimensions } from 'react-native';
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AppConfig from './src/AppConfig';
@@ -32,13 +32,21 @@ import SetupApiUrl from './src/screens/SetupApiUrl';
 import SetupFinish from './src/screens/SetupFinish';
 import SetupWelcome from './src/screens/SetupWelcome';
 import Settings from './src/screens/Settings';
+import SettingsApi from './src/screens/SettingsApi';
+import SettingsApiKey from './src/screens/SettingsApiKey';
+import SettingsApiUrl from './src/screens/SettingsApiUrl';
+import SettingsApiFallbackUrl from './src/screens/SettingsApiFallbackUrl';
+import SettingsCredits from './src/screens/SettingsCredits';
+import Axios from 'axios';
 
 const {Screen, Navigator} = createNativeStackNavigator();
-
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const {height, width} = useWindowDimensions();
+
   //state
+  const [s_loaded, setLoadedState] = useState(false);
   const [s_config, setConfigState] = useState({
     tagData:[
       {name:'vegan', color:'gray'},
@@ -53,32 +61,16 @@ export default function App() {
     env:{
       INITIALIZED:undefined,
       API_URL:undefined,
+      API_MAIN_URL:undefined,
+      API_FALLBACK_URL:undefined,
       API_KEY:undefined,
       API_KEY_HEADER_NAME:'Sativa',
     },
+    screen:{
+      width:-1,
+      height:-1,
+    },
   });
-
-  //cached
-  useMemo(async () => { //run once on init-before side effects
-    try {
-      if(await SecureStore.getItemAsync('INITIALIZED') === 'TRUE'){
-        //no need to run the setup, just load the env variables
-        const s_config_copy = {...s_config};
-        s_config_copy.env.API_KEY = await SecureStore.getItemAsync('API_KEY');
-        s_config_copy.env.API_URL = await SecureStore.getItemAsync('API_URL');
-        s_config_copy.env.INITIALIZED = true;
-        setConfigState(s_config_copy);
-      }
-      else{
-        const s_config_copy = {...s_config};
-        s_config_copy.env.INITIALIZED = false;
-        setConfigState(s_config_copy);
-      }
-    }
-    catch (e){
-      Alert.alert('Error Initializing App', `Something went wrong while starting the app and it may not function correctly, please contact your developer about this : ${e}`, [{text:'OK'}]);
-    }
-  }, []);
 
   //side-effects
   const [fonts_loaded] = useFonts({
@@ -92,17 +84,77 @@ export default function App() {
     'PTSerif-Italic':require('./assets/fonts/PTSerif-Italic.ttf'),
   });
 
-  //event-handlers
-  const handleRootViewLayout = useCallback(async () => { //run whenever fonts_loaded or s_config.env.INITIALIZED changes
-    if(fonts_loaded && s_config.env.INITIALIZED !== undefined) {
-      await SplashScreen.hideAsync();
+  useEffect(() => { //run once on init
+    async function init(){
+      //create a copy of the config state to modify and trigger a re-render with setState()
+      const s_config_copy = {...s_config};
+
+      //determine if the setup needs to be ran
+      try {
+        if(await SecureStore.getItemAsync('INITIALIZED') === 'TRUE'){
+          //no need to run the setup, just load the env variables
+          s_config_copy.env.API_KEY = await SecureStore.getItemAsync('API_KEY');
+          s_config_copy.env.API_MAIN_URL = await SecureStore.getItemAsync('API_MAIN_URL');
+          s_config_copy.env.API_FALLBACK_URL = await SecureStore.getItemAsync('API_FALLBACK_URL');
+
+          s_config_copy.env.INITIALIZED = true;
+        }
+        else{
+          s_config_copy.env.INITIALIZED = false;
+        }
+      }
+      catch (e){
+        Alert.alert('Error Initializing App', `Something went wrong while starting the app and it may not function correctly, please contact your developer about this : ${e}`, [{text:'OK'}]);
+      }
+
+      //set window dimensions
+      s_config_copy.screen.height = height;
+      s_config_copy.screen.width = width;
+
+      //determine whether or not to use the fallback URL
+      if(s_config_copy.env.API_FALLBACK_URL !== undefined){ //only run this step if there's a fallback url set, otherwise it's kind of pointless to run the check
+        const headers = {};
+        headers[s_config_copy.env.API_KEY_HEADER_NAME] = s_config_copy.env.API_KEY;
+
+        try{
+          const response_main = await Axios.get(s_config_copy.env.API_MAIN_URL, {headers:headers, timeout:1000});
+          s_config_copy.env.API_URL = s_config_copy.env.API_MAIN_URL;
+        }
+        catch(e){
+          //main url failed, try fallback
+          try{
+            const response_fallback = await Axios.get(s_config_copy.env.API_FALLBACK_URL, {headers:headers, timeout:1000});
+            s_config_copy.env.API_URL = s_config_copy.env.API_FALLBACK_URL;
+          }
+          catch(e2){
+            //both main url and fallback url failed
+            Alert.alert('Error Initializing App', 'Unable to connect to the backend server. Please make sure you are connected to the internet and that your API Key and URLs are set correctly.', [{text:'OK'}]);
+          }
+
+        }
+      }
+
+      //update the state and trigger the re-render using .setState()
+      console.log(s_config_copy);
+      setConfigState(s_config_copy);
     }
-  }, [fonts_loaded, s_config.env.INITIALIZED]);
 
+    init();
+  }, []);
 
-  if(!fonts_loaded) return null;
+  useEffect(() => {
+    console.log(`checking if loaded: fonts_loaded? = ${fonts_loaded}, s_config.env.INITIALIZED? = ${s_config.env.INITIALIZED}, s_config.env.API_URL = ${s_config.env.API_URL}`);
+    if(fonts_loaded && s_config.env.INITIALIZED !== undefined && s_config.env.API_URL !== undefined){
+      SplashScreen.hideAsync().then(() => {
+        setLoadedState(true);
+      });
+    }
+
+  }, [fonts_loaded, s_config.env.INITIALIZED, s_config.env.API_URL]);
+
+  if(!s_loaded) return null; //return nothing until the app is loaded
   else return (
-    <GestureHandlerRootView style={{flex:1}} onLayout={handleRootViewLayout}>
+    <GestureHandlerRootView style={{flex:1}}>
       <NavigationContainer>
         <AppConfig.Provider value={[s_config, setConfigState]} >
           <StatusBar style="auto" />
@@ -127,6 +179,11 @@ export default function App() {
                 <Screen name='edit-tags' component={EditTags} />
                 <Screen name='edit-notes' component={EditNotes} />
                 <Screen name='settings' component={Settings} />
+                <Screen name='settings-api' component={SettingsApi} />
+                <Screen name='settings-api-key' component={SettingsApiKey} />
+                <Screen name='settings-api-url' component={SettingsApiUrl} />
+                <Screen name='settings-api-fallback-url' component={SettingsApiFallbackUrl} />
+                <Screen name='settings-credits' component={SettingsCredits} />
               </> : <>
                 <Screen name='setup-welcome' component={SetupWelcome} />
                 <Screen name='setup-apiurl' component={SetupApiUrl} />
