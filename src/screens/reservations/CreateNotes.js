@@ -1,16 +1,14 @@
-import { getHours } from 'date-fns';
 import React, { useState } from 'react';
-import { Image, Text, TouchableHighlight, View } from 'react-native';
+import { Image, Keyboard, ScrollView, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import { appColors, getTimeString } from '../common';
-import setup_styles from '../styles/setup_styles';
-import global_styles from '../styles/global_styles';
-import TimePicker2 from '../TimePicker2';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import { appColors } from '../../common';
+import setup_styles from '../../styles/setup_styles';
+import global_styles from '../../styles/global_styles';
 
 export default function({route, navigation}){
     //state
-    const [s_time, setTimeState] = useState({hour:getHours(new Date()), minute:0});
+    const [s_notes, setNotesState] = useState('');
 
     //event-handlers
     function returnToHomeScreen(){
@@ -19,10 +17,10 @@ export default function({route, navigation}){
 
     function goToNextScreen(){
         const params = {...route.params};
-        params.time = getTimeString(s_time, false);
+        params.notes = s_notes.trim();
 
         navigation.navigate({
-            name:'create-guest',
+            name:'reservations-create-review',
             params:params,
         });
     }
@@ -31,7 +29,7 @@ export default function({route, navigation}){
         navigation.pop();
     }
 
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={ () => Keyboard.dismiss()}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
@@ -46,11 +44,16 @@ export default function({route, navigation}){
             <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
-            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Time</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Next, let's choose a time to schedule this Reservation for.</Text>
-            <TimePicker2 time={s_time} onSelect={next => setTimeState(next)} />
-        </View>
+        <ScrollView style={global_styles.fullView} contentContainerStyle={[global_styles.centeringView, setup_styles.bodyContent, setup_styles.bodyView]}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Notes</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Finally, are there any additional details that you would like to specify for this Reservation?</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is also optional.</Text>
+            <TextInput
+                style={setup_styles.bodyTextField}
+                value={s_notes}
+                onChangeText={setNotesState}
+                multiline={true} />
+        </ScrollView>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
                 style={global_styles.primaryButton} 

@@ -2,12 +2,12 @@ import Axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { Alert, Image, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import AppConfig from '../AppConfig';
-import { appColors } from '../common';
-import ReservationAlternate from '../ReservationAlternate';
-import global_styles from '../styles/global_styles';
-import setup_styles from '../styles/setup_styles';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import AppConfig from '../../AppConfig';
+import { appColors } from '../../common';
+import ReservationAlternate from '../../ReservationAlternate';
+import global_styles from '../../styles/global_styles';
+import setup_styles from '../../styles/setup_styles';
 
 export default function({route, navigation}){
 

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Image, Keyboard, ScrollView, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Image, Keyboard, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import { appColors } from '../common';
-import setup_styles from '../styles/setup_styles';
-import global_styles from '../styles/global_styles';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import { appColors } from '../../common';
+import GuestPicker from '../../GuestPicker';
+import setup_styles from '../../styles/setup_styles';
+import global_styles from '../../styles/global_styles';
 
 export default function({route, navigation}){
     //state
-    const [s_notes, setNotesState] = useState('');
+    const [s_guests, setGuestsState] = useState(1);
 
     //event-handlers
     function returnToHomeScreen(){
@@ -17,10 +18,10 @@ export default function({route, navigation}){
 
     function goToNextScreen(){
         const params = {...route.params};
-        params.notes = s_notes.trim();
+        params.seats = s_guests;
 
         navigation.navigate({
-            name:'create-review',
+            name:'reservations-create-name',
             params:params,
         });
     }
@@ -28,6 +29,7 @@ export default function({route, navigation}){
     function goToPreviousScreen(){
         navigation.pop();
     }
+
 
     return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={ () => Keyboard.dismiss()}>
         <View style={global_styles.headerView}>
@@ -44,15 +46,10 @@ export default function({route, navigation}){
             <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <ScrollView style={global_styles.fullView} contentContainerStyle={[global_styles.centeringView, setup_styles.bodyContent, setup_styles.bodyView]}>
-            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Notes</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Finally, are there any additional details that you would like to specify for this Reservation?</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is also optional.</Text>
-            <TextInput
-                style={setup_styles.bodyTextField}
-                value={s_notes}
-                onChangeText={setNotesState}
-                multiline={true} />
+        <ScrollView style={[global_styles.fullView, setup_styles.bodyView]} contentContainerStyle={global_styles.fullCenteringView}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Group Size</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Then, let's specify how many guests will be expected to arrive for this Reservation.</Text>
+            <GuestPicker guests={s_guests} onUpdate={next => setGuestsState(next)} />
         </ScrollView>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 

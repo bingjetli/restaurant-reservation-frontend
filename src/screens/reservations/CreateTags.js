@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { Image, Keyboard, ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Image, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import { appColors } from '../common';
-import GuestPicker from '../GuestPicker';
-import setup_styles from '../styles/setup_styles';
-import global_styles from '../styles/global_styles';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import AppConfig from '../../AppConfig';
+import { appColors } from '../../common';
+import setup_styles from '../../styles/setup_styles';
+import global_styles from '../../styles/global_styles';
+import TagPicker from '../../TagPicker';
 
 export default function({route, navigation}){
+    const [s_config, setConfigState] = useContext(AppConfig);
+
     //state
-    const [s_guests, setGuestsState] = useState(1);
+    const [s_tags, setTagsState] = useState({});
 
     //event-handlers
     function returnToHomeScreen(){
@@ -18,10 +21,10 @@ export default function({route, navigation}){
 
     function goToNextScreen(){
         const params = {...route.params};
-        params.seats = s_guests;
+        params.tags = Object.keys(s_tags);
 
         navigation.navigate({
-            name:'create-name',
+            name:'reservations-create-notes',
             params:params,
         });
     }
@@ -30,8 +33,16 @@ export default function({route, navigation}){
         navigation.pop();
     }
 
+    function selectTag(selected_tag){
+        const s_tags_copy = {...s_tags};
 
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={ () => Keyboard.dismiss()}>
+        if(s_tags[selected_tag]) delete s_tags_copy[selected_tag];
+        else s_tags_copy[selected_tag] = true;
+
+        setTagsState(s_tags_copy);
+    }
+
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
@@ -46,11 +57,12 @@ export default function({route, navigation}){
             <Text style={global_styles.headerText}>Add Reservation</Text>
             <View style={{flex:1}}></View>
         </View>
-        <ScrollView style={[global_styles.fullView, setup_styles.bodyView]} contentContainerStyle={global_styles.fullCenteringView}>
-            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Group Size</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Then, let's specify how many guests will be expected to arrive for this Reservation.</Text>
-            <GuestPicker guests={s_guests} onUpdate={next => setGuestsState(next)} />
-        </ScrollView>
+        <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Tags</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is optional, but you can choose to specify tags for this reservation.</Text>
+            <TagPicker tagData={s_config.tagData} selected={s_tags} onSelect={selectTag} />
+            <Text style={[global_styles.bodyCaption, setup_styles.bodyCaption, {textAlign:'center'}]} >Pressing on a tag will toggle it on and off for this reservation.</Text>
+        </View>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
                 style={global_styles.primaryButton} 

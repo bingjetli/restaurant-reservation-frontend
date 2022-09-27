@@ -3,12 +3,12 @@ import { format, parseISO } from 'date-fns';
 import React, { useContext } from 'react';
 import { Alert, Image, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import AppConfig from '../AppConfig';
-import { appColors, getTimeString, parse24HourTimeString } from '../common';
-import global_styles from '../styles/global_styles';
-import setup_styles from '../styles/setup_styles';
-import TagViewer from '../TagViewer';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import AppConfig from '../../AppConfig';
+import { appColors, getTimeString, parse24HourTimeString } from '../../common';
+import global_styles from '../../styles/global_styles';
+import setup_styles from '../../styles/setup_styles';
+import TagViewer from '../../TagViewer';
 
 export default function({route, navigation}){
     const [s_config, setConfigState] = useContext(AppConfig);
@@ -41,7 +41,7 @@ export default function({route, navigation}){
                 };
 
                 navigation.navigate({
-                    name:'create-found-duplicates',
+                    name:'reservations-create-found-duplicates',
                     params:params,
                     merge:true,
                 });

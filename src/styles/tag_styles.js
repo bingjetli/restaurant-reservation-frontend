@@ -26,9 +26,9 @@ export default StyleSheet.create({
         textTransform:'capitalize',
     },
     pickerButton:{
-        paddingHorizontal:20,
+        paddingHorizontal:10,
         margin:5,
-        borderRadius:100,
+        borderRadius:25,
         minHeight:50,
         justifyContent:'center',
         borderWidth:1,
@@ -36,9 +36,9 @@ export default StyleSheet.create({
         borderStyle:'dashed',
     },
     pickerButtonSelected:{
-        paddingHorizontal:20,
+        paddingHorizontal:10,
         margin:5,
-        borderRadius:100,
+        borderRadius:25,
         minHeight:50,
         justifyContent:'center',
         borderWidth:1,

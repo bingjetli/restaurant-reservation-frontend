@@ -54,13 +54,6 @@ export default function({route, navigation}){
                 </View>
 
                 <View style={global_styles.fullCenteringView}>
-                    <TouchableHighlight 
-                        style={date_picker_styles.pickerButton}
-                        activeOpacity={0.6} 
-                        underlayColor={appColors.content2} 
-                        onPress={togglePicker}>
-                        <Text style={date_picker_styles.pickerButtonText}>{format(s_viewer_date, width > 600 ? 'PPPP' : "ccc, MMM do, yyyy")}</Text>
-                    </TouchableHighlight>
                 </View>
 
                 <View style={home_styles.controlsView}>
@@ -81,8 +74,6 @@ export default function({route, navigation}){
                     </TouchableHighlight>
                 </View>
             </View>
-
-            <CollapsibleDatePicker3 date={s_viewer_date} onSelect={next => setViewerDateState(next)} isVisible={s_show_picker} />
 
             <ReservationViewer 
                 date={s_viewer_date} 

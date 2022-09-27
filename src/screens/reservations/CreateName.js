@@ -1,18 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { Image, Text, TouchableHighlight, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Image, Keyboard, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ArrowBackIosIcon from '../../assets/icons/arrow_back_ios.png';
-import AppConfig from '../AppConfig';
-import { appColors } from '../common';
-import setup_styles from '../styles/setup_styles';
-import global_styles from '../styles/global_styles';
-import TagPicker from '../TagPicker';
+import ArrowBackIosIcon from '../../../assets/icons/arrow_back_ios.png';
+import { appColors } from '../../common';
+import setup_styles from '../../styles/setup_styles';
+import global_styles from '../../styles/global_styles';
 
 export default function({route, navigation}){
-    const [s_config, setConfigState] = useContext(AppConfig);
-
     //state
-    const [s_tags, setTagsState] = useState({});
+    const [s_name, setNameState] = useState('');
+
+    //ref
+    const r_textbox = useRef(null);
 
     //event-handlers
     function returnToHomeScreen(){
@@ -21,10 +20,10 @@ export default function({route, navigation}){
 
     function goToNextScreen(){
         const params = {...route.params};
-        params.tags = Object.keys(s_tags);
+        params.name = s_name.trim();
 
         navigation.navigate({
-            name:'create-notes',
+            name:'reservations-create-phonenumber',
             params:params,
         });
     }
@@ -33,16 +32,7 @@ export default function({route, navigation}){
         navigation.pop();
     }
 
-    function selectTag(selected_tag){
-        const s_tags_copy = {...s_tags};
-
-        if(s_tags[selected_tag]) delete s_tags_copy[selected_tag];
-        else s_tags_copy[selected_tag] = true;
-
-        setTagsState(s_tags_copy);
-    }
-
-    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]}>
+    return (<SafeAreaView style={[global_styles.fullView, setup_styles.mainView]} onStartShouldSetResponder={ () => Keyboard.dismiss()}>
         <View style={global_styles.headerView}>
             <TouchableHighlight 
                 style={global_styles.headerBackButton} 
@@ -58,17 +48,24 @@ export default function({route, navigation}){
             <View style={{flex:1}}></View>
         </View>
         <View style={[global_styles.fullCenteringView, setup_styles.bodyView]}>
-            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Tags</Text>
-            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >This step is optional, but you can choose to specify tags for this reservation.</Text>
-            <TagPicker tagData={s_config.tagData} selected={s_tags} onSelect={selectTag} />
-            <Text style={[global_styles.bodyCaption, setup_styles.bodyCaption, {textAlign:'center'}]} >Pressing on a tag will toggle it on and off for this reservation.</Text>
+            <Text style={[global_styles.bodyHeading, setup_styles.bodyHeading]} >Name</Text>
+            <Text style={[global_styles.bodyText, setup_styles.bodyText]} >Afterwards, please enter the name of the person to make this reservation under.</Text>
+            <TextInput 
+                style={[global_styles.textBox, setup_styles.bodyTextBox]} 
+                value={s_name} 
+                autoFocus={true}
+                onPressIn={() => setNameState('')}
+                onChangeText={next => setNameState(next)} 
+                ref={r_textbox} />
+            <Text style={[global_styles.bodyCaption, setup_styles.bodyCaption]} >This should be a minimum of three (3) characters.</Text>
         </View>
         <View style={setup_styles.footerView}>
             <TouchableHighlight 
-                style={global_styles.primaryButton} 
+                style={s_name.length < 3 ? global_styles.primaryButtonDisabled : global_styles.primaryButton} 
                 activeOpacity={0.6}
                 underlayColor={appColors.main2}
-                onPress={goToNextScreen}>
+                onPress={goToNextScreen} 
+                disabled={s_name.length < 3}>
                 <Text style={global_styles.primaryButtonText}>Continue</Text>
             </TouchableHighlight>
             <TouchableHighlight 

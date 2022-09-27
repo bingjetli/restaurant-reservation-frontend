@@ -17,24 +17,26 @@ import ScheduleIcon from './assets/icons/schedule.png';
 import ScheduleFilledIcon from './assets/icons/schedule_filled.png';
 import AppConfig from './src/AppConfig';
 import { appColors } from './src/common';
-import CreateDate from './src/screens/CreateDate';
-import CreateFoundDuplicates from './src/screens/CreateFoundDuplicates';
-import CreateGuest from './src/screens/CreateGuest';
-import CreateName from './src/screens/CreateName';
-import CreateNotes from './src/screens/CreateNotes';
-import CreatePhoneNumber from './src/screens/CreatePhoneNumber';
-import CreateReview from './src/screens/CreateReview';
-import CreateTags from './src/screens/CreateTags';
-import CreateTime from './src/screens/CreateTime';
-import CreateWelcome from './src/screens/CreateWelcome';
-import EditDate from './src/screens/EditDate';
-import EditGuest from './src/screens/EditGuest';
-import EditName from './src/screens/EditName';
-import EditNotes from './src/screens/EditNotes';
-import EditPhoneNumber from './src/screens/EditPhoneNumber';
-import EditTags from './src/screens/EditTags';
-import EditTime from './src/screens/EditTime';
+
+import ReservationsCreateDate from './src/screens/reservations/CreateDate';
+import ReservationsCreateFoundDuplicates from './src/screens/reservations/CreateFoundDuplicates';
+import ReservationsCreateGuest from './src/screens/reservations/CreateGuest';
+import ReservationsCreateName from './src/screens/reservations/CreateName';
+import ReservationsCreateNotes from './src/screens/reservations/CreateNotes';
+import ReservationsCreatePhoneNumber from './src/screens/reservations/CreatePhoneNumber';
+import ReservationsCreateReview from './src/screens/reservations/CreateReview';
+import ReservationsCreateTags from './src/screens/reservations/CreateTags';
+import ReservationsCreateTime from './src/screens/reservations/CreateTime';
+import ReservationsCreateWelcome from './src/screens/reservations/CreateWelcome';
+import ReservationsEditDate from './src/screens/reservations/EditDate';
+import ReservationsEditGuest from './src/screens/reservations/EditGuest';
+import ReservationsEditName from './src/screens/reservations/EditName';
+import ReservationsEditNotes from './src/screens/reservations/EditNotes';
+import ReservationsEditPhoneNumber from './src/screens/reservations/EditPhoneNumber';
+import ReservationsEditTags from './src/screens/reservations/EditTags';
+import ReservationsEditTime from './src/screens/reservations/EditTime';
 import Reservations from './src/screens/Reservations';
+
 import Settings from './src/screens/Settings';
 import SettingsApi from './src/screens/SettingsApi';
 import SettingsApiFallbackUrl from './src/screens/SettingsApiFallbackUrl';
@@ -45,6 +47,7 @@ import SetupApiKey from './src/screens/SetupApiKey';
 import SetupApiUrl from './src/screens/SetupApiUrl';
 import SetupFinish from './src/screens/SetupFinish';
 import SetupWelcome from './src/screens/SetupWelcome';
+import TimeOffRequests from './src/screens/TimeOffRequests';
 import global_styles from './src/styles/global_styles';
 
 const NativeStack = createNativeStackNavigator();
@@ -216,24 +219,24 @@ export default function App() {
             {s_config.env.INITIALIZED ? <>
                 <NativeStack.Screen name='home' component={HomeTabs} />
 
-                <NativeStack.Screen name='create-welcome' component={CreateWelcome} />
-                <NativeStack.Screen name='create-date' component={CreateDate} />
-                <NativeStack.Screen name='create-time' component={CreateTime} />
-                <NativeStack.Screen name='create-guest' component={CreateGuest} />
-                <NativeStack.Screen name='create-name' component={CreateName} />
-                <NativeStack.Screen name='create-phonenumber' component={CreatePhoneNumber} />
-                <NativeStack.Screen name='create-tags' component={CreateTags} />
-                <NativeStack.Screen name='create-notes' component={CreateNotes} />
-                <NativeStack.Screen name='create-review' component={CreateReview} />
-                <NativeStack.Screen name='create-found-duplicates' component={CreateFoundDuplicates} />
+                <NativeStack.Screen name='reservations-create-welcome' component={ReservationsCreateWelcome} />
+                <NativeStack.Screen name='reservations-create-date' component={ReservationsCreateDate} />
+                <NativeStack.Screen name='reservations-create-time' component={ReservationsCreateTime} />
+                <NativeStack.Screen name='reservations-create-guest' component={ReservationsCreateGuest} />
+                <NativeStack.Screen name='reservations-create-name' component={ReservationsCreateName} />
+                <NativeStack.Screen name='reservations-create-phonenumber' component={ReservationsCreatePhoneNumber} />
+                <NativeStack.Screen name='reservations-create-tags' component={ReservationsCreateTags} />
+                <NativeStack.Screen name='reservations-create-notes' component={ReservationsCreateNotes} />
+                <NativeStack.Screen name='reservations-create-review' component={ReservationsCreateReview} />
+                <NativeStack.Screen name='reservations-create-found-duplicates' component={ReservationsCreateFoundDuplicates} />
 
-                <NativeStack.Screen name='edit-date' component={EditDate} />
-                <NativeStack.Screen name='edit-time' component={EditTime} />
-                <NativeStack.Screen name='edit-guest' component={EditGuest} />
-                <NativeStack.Screen name='edit-name' component={EditName} />
-                <NativeStack.Screen name='edit-phonenumber' component={EditPhoneNumber} />
-                <NativeStack.Screen name='edit-tags' component={EditTags} />
-                <NativeStack.Screen name='edit-notes' component={EditNotes} />
+                <NativeStack.Screen name='reservations-edit-date' component={ReservationsEditDate} />
+                <NativeStack.Screen name='reservations-edit-time' component={ReservationsEditTime} />
+                <NativeStack.Screen name='reservations-edit-guest' component={ReservationsEditGuest} />
+                <NativeStack.Screen name='reservations-edit-name' component={ReservationsEditName} />
+                <NativeStack.Screen name='reservations-edit-phonenumber' component={ReservationsEditPhoneNumber} />
+                <NativeStack.Screen name='reservations-edit-tags' component={ReservationsEditTags} />
+                <NativeStack.Screen name='reservations-edit-notes' component={ReservationsEditNotes} />
 
 
                 <NativeStack.Screen name='settings' component={Settings} />
@@ -280,6 +283,6 @@ function HomeTabs(){
     },
   }) }>
     <BottomTab.Screen name='reservations' component={Reservations} />
-    <BottomTab.Screen name='time-off' component={Reservations} />
+    <BottomTab.Screen name='time-off' component={TimeOffRequests} />
   </BottomTab.Navigator>);
 }

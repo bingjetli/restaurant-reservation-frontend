@@ -62,7 +62,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-date',
+            name:'reservations-edit-date',
             params:{
                 date:item.date,
                 time:item.time,
@@ -75,7 +75,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-guest',
+            name:'reservations-edit-guest',
             params:{
                 id:item._id,
                 seats:item.seats,
@@ -87,7 +87,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-name',
+            name:'reservations-edit-name',
             params:{
                 id:item._id,
                 name:item.name,
@@ -99,7 +99,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-phonenumber',
+            name:'reservations-edit-phonenumber',
             params:{
                 id:item._id,
                 phoneNumber:item.phoneNumber,
@@ -111,7 +111,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-tags',
+            name:'reservations-edit-tags',
             params:{
                 id:item._id,
                 tags:item.tags,
@@ -123,7 +123,7 @@ export default function({item}){
         setShowOptionsState(false);
 
         navigation.navigate({
-            name:'edit-notes',
+            name:'reservations-edit-notes',
             params:{
                 id:item._id,
                 notes:item.notes,
