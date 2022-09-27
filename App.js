@@ -1,14 +1,22 @@
+import NetInfo from '@react-native-community/netinfo';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Axios from 'axios';
 import { useFonts } from 'expo-font';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, useWindowDimensions } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, Image, Text, TouchableHighlight, useWindowDimensions } from 'react-native';
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import MenuBookIcon from './assets/icons/menu_book.png';
+import MenuBookFilledIcon from './assets/icons/menu_book_filled.png';
+import ScheduleIcon from './assets/icons/schedule.png';
+import ScheduleFilledIcon from './assets/icons/schedule_filled.png';
 import AppConfig from './src/AppConfig';
+import { appColors } from './src/common';
 import CreateDate from './src/screens/CreateDate';
 import CreateFoundDuplicates from './src/screens/CreateFoundDuplicates';
 import CreateGuest from './src/screens/CreateGuest';
@@ -26,22 +34,22 @@ import EditNotes from './src/screens/EditNotes';
 import EditPhoneNumber from './src/screens/EditPhoneNumber';
 import EditTags from './src/screens/EditTags';
 import EditTime from './src/screens/EditTime';
-import Home from './src/screens/Home';
+import Reservations from './src/screens/Reservations';
+import Settings from './src/screens/Settings';
+import SettingsApi from './src/screens/SettingsApi';
+import SettingsApiFallbackUrl from './src/screens/SettingsApiFallbackUrl';
+import SettingsApiKey from './src/screens/SettingsApiKey';
+import SettingsApiUrl from './src/screens/SettingsApiUrl';
+import SettingsCredits from './src/screens/SettingsCredits';
 import SetupApiKey from './src/screens/SetupApiKey';
 import SetupApiUrl from './src/screens/SetupApiUrl';
 import SetupFinish from './src/screens/SetupFinish';
 import SetupWelcome from './src/screens/SetupWelcome';
-import Settings from './src/screens/Settings';
-import SettingsApi from './src/screens/SettingsApi';
-import SettingsApiKey from './src/screens/SettingsApiKey';
-import SettingsApiUrl from './src/screens/SettingsApiUrl';
-import SettingsApiFallbackUrl from './src/screens/SettingsApiFallbackUrl';
-import SettingsCredits from './src/screens/SettingsCredits';
-import Axios from 'axios';
-import NetInfo from '@react-native-community/netinfo';
+import global_styles from './src/styles/global_styles';
 
-let abort_controller;
-const {Screen, Navigator} = createNativeStackNavigator();
+const NativeStack = createNativeStackNavigator();
+const BottomTab = createBottomTabNavigator();
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -204,41 +212,74 @@ export default function App() {
       <NavigationContainer>
         <AppConfig.Provider value={[s_config, setConfigState]} >
           <StatusBar style="auto" />
-          <Navigator screenOptions={{headerShown:false, animation:'fade_from_bottom'}}>
+          <NativeStack.Navigator screenOptions={{headerShown:false, animation:'fade_from_bottom'}}>
             {s_config.env.INITIALIZED ? <>
-                <Screen name='home' component={Home} />
-                <Screen name='create-welcome' component={CreateWelcome} />
-                <Screen name='create-date' component={CreateDate} />
-                <Screen name='create-time' component={CreateTime} />
-                <Screen name='create-guest' component={CreateGuest} />
-                <Screen name='create-name' component={CreateName} />
-                <Screen name='create-phonenumber' component={CreatePhoneNumber} />
-                <Screen name='create-tags' component={CreateTags} />
-                <Screen name='create-notes' component={CreateNotes} />
-                <Screen name='create-review' component={CreateReview} />
-                <Screen name='create-found-duplicates' component={CreateFoundDuplicates} />
-                <Screen name='edit-date' component={EditDate} />
-                <Screen name='edit-time' component={EditTime} />
-                <Screen name='edit-guest' component={EditGuest} />
-                <Screen name='edit-name' component={EditName} />
-                <Screen name='edit-phonenumber' component={EditPhoneNumber} />
-                <Screen name='edit-tags' component={EditTags} />
-                <Screen name='edit-notes' component={EditNotes} />
-                <Screen name='settings' component={Settings} />
-                <Screen name='settings-api' component={SettingsApi} />
-                <Screen name='settings-api-key' component={SettingsApiKey} />
-                <Screen name='settings-api-url' component={SettingsApiUrl} />
-                <Screen name='settings-api-fallback-url' component={SettingsApiFallbackUrl} />
-                <Screen name='settings-credits' component={SettingsCredits} />
+                <NativeStack.Screen name='home' component={HomeTabs} />
+
+                <NativeStack.Screen name='create-welcome' component={CreateWelcome} />
+                <NativeStack.Screen name='create-date' component={CreateDate} />
+                <NativeStack.Screen name='create-time' component={CreateTime} />
+                <NativeStack.Screen name='create-guest' component={CreateGuest} />
+                <NativeStack.Screen name='create-name' component={CreateName} />
+                <NativeStack.Screen name='create-phonenumber' component={CreatePhoneNumber} />
+                <NativeStack.Screen name='create-tags' component={CreateTags} />
+                <NativeStack.Screen name='create-notes' component={CreateNotes} />
+                <NativeStack.Screen name='create-review' component={CreateReview} />
+                <NativeStack.Screen name='create-found-duplicates' component={CreateFoundDuplicates} />
+
+                <NativeStack.Screen name='edit-date' component={EditDate} />
+                <NativeStack.Screen name='edit-time' component={EditTime} />
+                <NativeStack.Screen name='edit-guest' component={EditGuest} />
+                <NativeStack.Screen name='edit-name' component={EditName} />
+                <NativeStack.Screen name='edit-phonenumber' component={EditPhoneNumber} />
+                <NativeStack.Screen name='edit-tags' component={EditTags} />
+                <NativeStack.Screen name='edit-notes' component={EditNotes} />
+
+
+                <NativeStack.Screen name='settings' component={Settings} />
+                <NativeStack.Screen name='settings-api' component={SettingsApi} />
+                <NativeStack.Screen name='settings-api-key' component={SettingsApiKey} />
+                <NativeStack.Screen name='settings-api-url' component={SettingsApiUrl} />
+                <NativeStack.Screen name='settings-api-fallback-url' component={SettingsApiFallbackUrl} />
+                <NativeStack.Screen name='settings-credits' component={SettingsCredits} />
               </> : <>
-                <Screen name='setup-welcome' component={SetupWelcome} />
-                <Screen name='setup-apiurl' component={SetupApiUrl} />
-                <Screen name='setup-apikey' component={SetupApiKey} />
-                <Screen name='setup-finish' component={SetupFinish} />
+                <NativeStack.Screen name='setup-welcome' component={SetupWelcome} />
+                <NativeStack.Screen name='setup-apiurl' component={SetupApiUrl} />
+                <NativeStack.Screen name='setup-apikey' component={SetupApiKey} />
+                <NativeStack.Screen name='setup-finish' component={SetupFinish} />
               </>}
-          </Navigator>
+          </NativeStack.Navigator>
         </AppConfig.Provider>
       </NavigationContainer>
     </GestureHandlerRootView>
   );
+}
+
+function HomeTabs(){
+  return (<BottomTab.Navigator screenOptions={ ({route}) => ({
+    headerShown:false,
+    animation:'fade_from_bottom',
+    tabBarLabel: ({focused, color}) => {
+      switch(route.name){
+        case 'reservations': return (<Text style={[global_styles.secondaryButtonText, {fontFamily: focused ? 'PTSans-Bold' : 'PTSans-Regular'}]} >Reservations</Text>)
+        case 'time-off': return (<Text style={[global_styles.secondaryButtonText, {fontFamily: focused ? 'PTSans-Bold' : 'PTSans-Regular'}]} >Time-Off</Text>)
+        default: return (<Text>Undefined</Text>)
+      }
+    },
+    tabBarIcon: ({focused, color, size}) => {
+      switch(route.name){
+        case 'reservations': return (<Image style={global_styles.iconButtonImage} source={focused ? MenuBookFilledIcon : MenuBookIcon} />)
+        case 'time-off': return (<Image style={global_styles.iconButtonImage} source={focused ? ScheduleFilledIcon : ScheduleIcon} />)
+        default: return (<Text>Missing Icon</Text>)
+      }
+    },
+    tabBarButton: (props) => (<TouchableHighlight underlayColor={appColors.content2} activeOpacity={0.6} {...props} />),
+    tabBarStyle:{
+      minHeight:50,
+      backgroundColor:appColors.content,
+    },
+  }) }>
+    <BottomTab.Screen name='reservations' component={Reservations} />
+    <BottomTab.Screen name='time-off' component={Reservations} />
+  </BottomTab.Navigator>);
 }
