@@ -12,23 +12,26 @@ import ReservationViewer from '../ReservationViewer';
 import date_picker_styles from '../styles/date_picker_styles';
 import global_styles from '../styles/global_styles';
 import home_styles from '../styles/home_styles';
+import TimeOffRequestViewer from '../TimeOffRequestViewer';
 
 export default function({route, navigation}){
     const {width} = useWindowDimensions();
 
     //state
     const [s_viewer_date, setViewerDateState] = useState(new Date());
-    const [s_show_picker, setShowPickerState] = useState(false);
+    //const [s_show_picker, setShowPickerState] = useState(false);
 
     //side-effects
-    useFocusEffect(useCallback(() => {
-        //refresh the screen to the current date
-        setViewerDateState(new Date());
-    },[]));
+    /** Refresh the screen to the current date when focused.
+     * This operation costs 2 renders on initialization.
+     * 
+     * The useCallback(, []) call is required to prevent crashing
+     */
+    useFocusEffect(useCallback(() => setViewerDateState(new Date()), []));
 
     //event-handlers
-    function addReservation(){
-        navigation.navigate('reservations-create-welcome');
+    function addTimeOffRequest(){
+        navigation.navigate('time-off-requests-create-welcome');
     }
 
     function handleViewerSwipeLeft(){
@@ -38,9 +41,9 @@ export default function({route, navigation}){
     function handleViewerSwipeRight(){
         setViewerDateState(subDays(s_viewer_date, 1));
     }
-    function togglePicker(){
-        setShowPickerState(!s_show_picker);
-    }
+    //function togglePicker(){
+    //    setShowPickerState(!s_show_picker);
+    //}
 
     function openSettings(){
         navigation.navigate('settings');
@@ -53,7 +56,8 @@ export default function({route, navigation}){
                     <Image style={home_styles.headerLogo} source={VuLogo} />
                 </View>
 
-                <View style={global_styles.fullCenteringView}>
+                <View style={[global_styles.fullCenteringView]}>
+                    <Text style={[global_styles.headerText, {color:appColors.text, textAlignVertical:'center'}]}>Time-off Requests</Text>
                 </View>
 
                 <View style={home_styles.controlsView}>
@@ -61,7 +65,7 @@ export default function({route, navigation}){
                         style={global_styles.iconButton} 
                         activeOpacity={0.6}
                         underlayColor={appColors.content2}
-                        onPress={addReservation} >
+                        onPress={addTimeOffRequest} >
                             <Image style={global_styles.iconButtonImage} source={AddIcon} />
                     </TouchableHighlight>
 
@@ -75,11 +79,8 @@ export default function({route, navigation}){
                 </View>
             </View>
 
-            <ReservationViewer 
-                date={s_viewer_date} 
-                onSwipeLeft={handleViewerSwipeLeft}
-                onSwipeRight={handleViewerSwipeRight}
-                onPress={() => setShowPickerState(false)}/>
+            <TimeOffRequestViewer date={s_viewer_date} />
+
         </SafeAreaView>
     );
 }

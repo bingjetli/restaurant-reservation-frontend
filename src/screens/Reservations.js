@@ -1,11 +1,12 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { addDays, format, subDays } from 'date-fns';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Image, Text, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AddIcon from '../../assets/icons/add.png';
 import SettingsIcon from '../../assets/icons/settings.png';
 import VuLogo from '../../assets/vu_logo.png';
+import AppConfig from '../AppConfig';
 import CollapsibleDatePicker3 from '../CollapsibleDatePicker3';
 import { appColors } from '../common';
 import ReservationViewer from '../ReservationViewer';
@@ -14,17 +15,19 @@ import global_styles from '../styles/global_styles';
 import home_styles from '../styles/home_styles';
 
 export default function({route, navigation}){
-    const {width} = useWindowDimensions();
+    const [s_config, setConfigState] = useContext(AppConfig);
 
     //state
     const [s_viewer_date, setViewerDateState] = useState(new Date());
     const [s_show_picker, setShowPickerState] = useState(false);
 
     //side-effects
-    useFocusEffect(useCallback(() => {
-        //refresh the screen to the current date
-        setViewerDateState(new Date());
-    },[]));
+    /** Refresh the screen to the current date when focused.
+     * This operation costs 2 renders on initialization.
+     * 
+     * The useCallback(, []) call is required to prevent crashing
+     */
+    useFocusEffect(useCallback(() => setViewerDateState(new Date()), []));
 
     //event-handlers
     function addReservation(){
@@ -59,7 +62,7 @@ export default function({route, navigation}){
                         activeOpacity={0.6} 
                         underlayColor={appColors.content2} 
                         onPress={togglePicker}>
-                        <Text style={date_picker_styles.pickerButtonText}>{format(s_viewer_date, width > 600 ? 'PPPP' : "ccc, MMM do, yyyy")}</Text>
+                        <Text style={date_picker_styles.pickerButtonText}>{format(s_viewer_date, s_config.screen.width > 600 ? 'PPPP' : 'ccc, MMM do, yyyy')}</Text>
                     </TouchableHighlight>
                 </View>
 

@@ -47,7 +47,20 @@ import SetupApiKey from './src/screens/SetupApiKey';
 import SetupApiUrl from './src/screens/SetupApiUrl';
 import SetupFinish from './src/screens/SetupFinish';
 import SetupWelcome from './src/screens/SetupWelcome';
+
+import TimeOffRequestsEditEndDate from './src/screens/time_off_requests/EditEndDate';
+import TimeOffRequestsEditStartDate from './src/screens/time_off_requests/EditStartDate';
+import TimeOffRequestsEditDetails from './src/screens/time_off_requests/EditDetails';
+import TimeOffRequestsEditName from './src/screens/time_off_requests/EditName';
+import TimeOffRequestsCreateFoundDuplicates from './src/screens/time_off_requests/CreateFoundDuplicates';
+import TimeOffRequestsCreateReview from './src/screens/time_off_requests/CreateReview';
+import TimeOffRequestsCreateDetails from './src/screens/time_off_requests/CreateDetails';
+import TimeOffRequestsCreateEndDate from './src/screens/time_off_requests/CreateEndDate';
+import TimeOffRequestsCreateStartDate from './src/screens/time_off_requests/CreateStartDate';
+import TimeOffRequestsCreateName from './src/screens/time_off_requests/CreateName';
+import TimeOffRequestsCreateWelcome from './src/screens/time_off_requests/CreateWelcome';
 import TimeOffRequests from './src/screens/TimeOffRequests';
+
 import global_styles from './src/styles/global_styles';
 
 const NativeStack = createNativeStackNavigator();
@@ -58,7 +71,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const {height, width} = useWindowDimensions();
 
-  //state
+  /** STATE */
   const [s_loaded, setLoadedState] = useState(false);
   const [s_config, setConfigState] = useState({
     tagData:[
@@ -85,7 +98,7 @@ export default function App() {
     },
   });
 
-  //side-effects
+  /** SIDE-EFFECTS */
   const [fonts_loaded] = useFonts({
     'YesevaOne-Regular':require('./assets/fonts/YesevaOne-Regular.ttf'),
     'PTSans-Regular':require('./assets/fonts/PTSans-Regular.ttf'),
@@ -110,6 +123,9 @@ export default function App() {
           s_config_copy.env.API_MAIN_URL = await SecureStore.getItemAsync('API_MAIN_URL');
           s_config_copy.env.API_FALLBACK_URL = await SecureStore.getItemAsync('API_FALLBACK_URL');
 
+          /** Use the main URL as the default API URL */
+          s_config_copy.env.API_URL = s_config_copy.env.API_MAIN_URL;
+
           s_config_copy.env.INITIALIZED = true;
         }
         else{
@@ -124,8 +140,13 @@ export default function App() {
       s_config_copy.screen.height = height;
       s_config_copy.screen.width = width;
 
-      //determine whether or not to use the fallback URL
-      if(s_config_copy.env.API_FALLBACK_URL !== undefined){ //only run this step if there is a fallback url set, otherwise it's kind of pointless to run the check
+
+      /** Determine whether or not to use the fallback URL, we'll
+       * only run this step if there is a fallback URL defined and
+       * the fallback URL is not empty, otherwise this check would
+       * be kind of pointless to run.
+       */
+      if(s_config_copy.env.API_FALLBACK_URL !== undefined && s_config_copy.env.API_FALLBACK_URL.length > 0){ 
         const headers = {};
         headers[s_config_copy.env.API_KEY_HEADER_NAME] = s_config_copy.env.API_KEY;
 
@@ -190,7 +211,7 @@ export default function App() {
       }
 
       //check the network only when a Fallback URL is defined and the client is connected to a network
-      if(s_config.env.API_FALLBACK_URL !== undefined && net_state.type !== 'none' && net_state.isConnected){
+      if(s_config.env.API_FALLBACK_URL !== undefined && s_config.env.API_FALLBACK_URL.length > 0 && net_state.type !== 'none' && net_state.isConnected){
         checkNetwork();
       }
     });
@@ -206,8 +227,6 @@ export default function App() {
     }
 
   }, [fonts_loaded, s_config.env.INITIALIZED, s_config.env.API_URL]);
-
-  //event-handlers
 
   if(!s_loaded) return null; //return nothing until the app is loaded
   else return (
@@ -238,6 +257,18 @@ export default function App() {
                 <NativeStack.Screen name='reservations-edit-tags' component={ReservationsEditTags} />
                 <NativeStack.Screen name='reservations-edit-notes' component={ReservationsEditNotes} />
 
+                <NativeStack.Screen name='time-off-requests-create-welcome' component={TimeOffRequestsCreateWelcome} />
+                <NativeStack.Screen name='time-off-requests-create-name' component={TimeOffRequestsCreateName} />
+                <NativeStack.Screen name='time-off-requests-create-start-date' component={TimeOffRequestsCreateStartDate} />
+                <NativeStack.Screen name='time-off-requests-create-end-date' component={TimeOffRequestsCreateEndDate} />
+                <NativeStack.Screen name='time-off-requests-create-details' component={TimeOffRequestsCreateDetails} />
+                <NativeStack.Screen name='time-off-requests-create-review' component={TimeOffRequestsCreateReview} />
+                <NativeStack.Screen name='time-off-requests-create-found-duplicates' component={TimeOffRequestsCreateFoundDuplicates} />
+
+                <NativeStack.Screen name='time-off-requests-edit-name' component={TimeOffRequestsEditName} />
+                <NativeStack.Screen name='time-off-requests-edit-details' component={TimeOffRequestsEditDetails} />
+                <NativeStack.Screen name='time-off-requests-edit-start-date' component={TimeOffRequestsEditStartDate} />
+                <NativeStack.Screen name='time-off-requests-edit-end-date' component={TimeOffRequestsEditEndDate} />
 
                 <NativeStack.Screen name='settings' component={Settings} />
                 <NativeStack.Screen name='settings-api' component={SettingsApi} />
@@ -265,7 +296,7 @@ function HomeTabs(){
     tabBarLabel: ({focused, color}) => {
       switch(route.name){
         case 'reservations': return (<Text style={[global_styles.secondaryButtonText, {fontFamily: focused ? 'PTSans-Bold' : 'PTSans-Regular'}]} >Reservations</Text>)
-        case 'time-off': return (<Text style={[global_styles.secondaryButtonText, {fontFamily: focused ? 'PTSans-Bold' : 'PTSans-Regular'}]} >Time-Off</Text>)
+        case 'time-off': return (<Text style={[global_styles.secondaryButtonText, {fontFamily: focused ? 'PTSans-Bold' : 'PTSans-Regular'}]} >Time-off</Text>)
         default: return (<Text>Undefined</Text>)
       }
     },
@@ -282,7 +313,7 @@ function HomeTabs(){
       backgroundColor:appColors.content,
     },
   }) }>
-    <BottomTab.Screen name='reservations' component={Reservations} />
     <BottomTab.Screen name='time-off' component={TimeOffRequests} />
+    <BottomTab.Screen name='reservations' component={Reservations} />
   </BottomTab.Navigator>);
 }

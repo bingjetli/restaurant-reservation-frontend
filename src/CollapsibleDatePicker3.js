@@ -17,30 +17,25 @@ import AppConfig from './AppConfig';
 let abort_controller; //this is shared with all instances of this component, but it should be fine since we should only have one of these active at any given point in time
 
 export default function({date, onSelect, isVisible}){
-    const {height, width} = useWindowDimensions();
     const [s_config, setConfigState] = useContext(AppConfig);
 
-    //state
+    /** STATES */
     const [s_show_total_guests, setShowTotalGuestsState] = useState(false);
     const [s_reservation_data, setReservationData] = useState({date:undefined, total_guests:undefined});
 
-    //cached
-    const c_dates_array = useMemo(() => {
-        const dates_array = eachDayOfInterval({
-            start:startOfWeek(startOfMonth(date)),
-            end:endOfWeek(endOfMonth(date))
-        });
-        
-        return dates_array;
-    }, [date]);
+    /** RENDER-TIME VARIABLES */
+    const each_day_in_month = eachDayOfInterval({
+        start:startOfWeek(startOfMonth(date)),
+        end:endOfWeek(endOfMonth(date))
+    });
 
-    useMemo(() => {
-        //cancel the previous request before running the current one
-        if(abort_controller) abort_controller.abort();
-    }, [date]);
+    /** SIDE-EFFECTS */
+    useEffect(() => {
+        /** Cancel the previous request before running another one.*/
+        abort_controller && abort_controller.abort();
 
-    //side-effects
-    useEffect(fetchReservationData, [date]); //attempt to update the reservation data whenever the date changes, this only performs a GET request if the month or year is different
+        fetchReservationData();
+    }, [date]); //attempt to update the reservation data whenever the date changes, this only performs a GET request if the month or year is different
 
     //event-handler
     function nextMonth(){
@@ -178,7 +173,7 @@ export default function({date, onSelect, isVisible}){
 
     return(<View style={{flexDirection:'row-reverse', backgroundColor:appColors.content, justifyContent:'center', borderBottomColor:appColors.content3, borderBottomWidth:1}}>
 
-        {width / 400 >= 1.5 && <Animated.View style={[{flex:1, justifyContent:'center', alignItems:'center'}, as_picker_view]}>
+        {s_config.screen.width / 400 >= 1.5 && <Animated.View style={[{flex:1, justifyContent:'center', alignItems:'center'}, as_picker_view]}>
             <Text style={{color:appColors.text4, fontSize:125, textAlign:'center', fontFamily:'PTSans-Regular'}}>{getDate(date)}</Text>
             <Text style={{color:appColors.text4, fontSize:25, textAlign:'center', fontFamily:'PTSans-Regular', textTransform:'uppercase'}}>{format(date, 'EEEE')}</Text>
         </Animated.View>}
@@ -250,7 +245,7 @@ export default function({date, onSelect, isVisible}){
                     <Text style={date_picker_styles.dayNameText}>Thu</Text>
                     <Text style={date_picker_styles.dayNameText}>Fri</Text>
                     <Text style={date_picker_styles.dayNameText}>Sat</Text>
-                    {c_dates_array.map((item, item_i) => (<View style={date_picker_styles.dateView} key={item_i}>
+                    {each_day_in_month.map((item, item_i) => (<View style={date_picker_styles.dateView} key={item_i}>
                         {getMonth(date) === getMonth(item) && <TouchableHighlight 
                             style={getDate(date) === getDate(item) ? date_picker_styles.dateButtonSelected : date_picker_styles.dateButton}
                             activeOpacity={0.6}

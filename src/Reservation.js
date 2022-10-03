@@ -15,7 +15,7 @@ import global_styles from './styles/global_styles';
 import reservation_styles from './styles/reservation_styles';
 import TagViewer from './TagViewer';
 
-export default function({item}){
+export default function({item, refreshViewer}){
     const navigation = useNavigation(); //hook to retreive navigation prop from nested component
     const [s_config, setConfigState] = useContext(AppConfig);
 
@@ -155,6 +155,7 @@ export default function({item}){
                         Axios.delete(url, {headers:headers, data:payload}).then(r => {
                             if(r.data.result === 'successful'){
                                 setShowOptionsState(false);
+                                refreshViewer();
                                 Alert.alert('Successfully Deleted', 'The Reservation has been permanently deleted from the system.', [{text:'OK'}]);
                             }
                             else if(r.data.result === 'error_occured'){

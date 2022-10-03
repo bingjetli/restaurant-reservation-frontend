@@ -16,40 +16,42 @@ let abort_controller; //this variable is accessible from every other instance of
 export default function({date, onSwipeLeft, onSwipeRight, onPress}){
     const [s_config, setConfigState] = useContext(AppConfig);
 
-    //state
-    const [s_is_fetching, setIsFetchingState] = useState(true);
-    const [s_has_reservations, setHasReservationsState] = useState(false);
-    const [s_reservations_by_time, setReservationsByTimeState] = useState({});
+    /** STATE */
+    const [s_data, setDataState] = useState({
+        isFetching : true,
+        hasReservations : false,
+        reservationsByTime : [],
+    });
 
-    //cached
-    const c_tag_colors = useMemo(() => {
-        const tag_colors = {};
-        s_config.tagData.forEach(tag => { 
-            tag_colors[tag.name] = tag.color;
-        });
-    }, [s_config]);
+    /** RENDER-TIME VARIABLES */
+    const total_guests_by_time = {};
 
-    const c_reservation_by_time_total_guests = useMemo(() => {
-        const reservation_by_time_total_guests = {};
+    /** RENDER-TIME OPERATIONS */
+    Object.keys(s_data.reservationsByTime).forEach(time_section => {
+        total_guests_by_time[time_section] = s_data.reservationsByTime[time_section].reduce((previous_value, current_item) => previous_value + current_item.seats, 0);
+    });
 
-        Object.keys(s_reservations_by_time).forEach(time_section => {
-            reservation_by_time_total_guests[time_section] = s_reservations_by_time[time_section].reduce((previous_return_value , current_item) => {
-                return previous_return_value + current_item.seats;
-            }, 0)
-        });
+    /** SIDE-EFFECTS */
+    useEffect(() => {
+        /** Make sure that the previous request is cancelled before
+         * starting a new one, this fixes some jank that occurs
+         * while quickly swiping the viewer.
+         */
+        s_data.isFetching && abort_controller && abort_controller.abort();
 
-        return reservation_by_time_total_guests;
+        /** Whenever the date changes and before fetching the
+         * reservations from the backend, reset the hasReservations 
+         * state and the isFetching state
+         */
+        const data_copy = {...s_data};
+        data_copy.hasReservations = false;
+        data_copy.isFetching = true;
+        setDataState(data_copy);
 
-    }, [s_reservations_by_time]);
-
-    useMemo(() => { //run this whenever date changes, but before useEffect[date] runs
-        if(s_is_fetching) if(abort_controller) abort_controller.abort(); //make sure the previous request is canceled before starting a new one, this fixes some jank while quickly swiping the viewer
-        setHasReservationsState(false); //hide the previous reservations while we fetch the new reservations
-        setIsFetchingState(true); //set fetching state to true
+        fetchReservations();
     }, [date]);
 
-    //side-effects
-    useEffect(() => { //run this whenever date changes
+    function fetchReservations(){
         const url = s_config.env.API_URL + '/reservations?startDate=' + formatISO(date, {representation:'date'});
         const headers = {};
         headers[s_config.env.API_KEY_HEADER_NAME] = s_config.env.API_KEY;
@@ -57,8 +59,10 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
         abort_controller = new AbortController();
         Axios.get(url, {headers:headers, signal:abort_controller.signal}).then(r => {
             if(r.data.result === 'not_found'){
-                setIsFetchingState(false);
-                setHasReservationsState(false);
+                const data_copy = {...s_data};
+                data_copy.hasReservations = false;
+                data_copy.isFetching = false;
+                setDataState(data_copy);
             }
             else if(r.data.result === 'successful'){
                 //[{date, time, ...}, {date, time, ...}, ...] -> {time1 : [{date, time, ...}, {date, time, ...}, ...], time2 : { ... }}
@@ -72,9 +76,11 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                     reservation_object_by_time[reservation.time].push(reservation);
                 });
 
-                setIsFetchingState(false);
-                setHasReservationsState(true);
-                setReservationsByTimeState(reservation_object_by_time);
+                const data_copy = {...s_data};
+                data_copy.hasReservations = true;
+                data_copy.isFetching = false;
+                data_copy.reservationsByTime = reservation_object_by_time;
+                setDataState(data_copy);
             }
             else if(r.data.result === 'error_occured'){
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
@@ -82,7 +88,13 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
         }).catch(e => {
             if(e.message !== 'canceled') Alert.alert('Error Occured!', `An error occured while fetching reservations for the Reservation Viewer. \n${e}`, [{'text':'OK'}]);
         });
-    }, [date]);
+    }
+
+
+    //event-handlers
+    function refresh(){
+        fetchReservations();
+    }
 
     //gestures and animations
     const sv_x_offset = useSharedValue(0);
@@ -139,24 +151,24 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
     return (<GestureDetector gesture={Gesture.Simultaneous(g_pan_handler_js, g_pan_handler_ui)}>
         <Animated.View style={[global_styles.fullView, as_main_view, {maxWidth:'100%', width:'100%', alignSelf:'center'}]} onStartShouldSetResponder={onPress}>
             <ScrollView>
-                {s_has_reservations && Object.keys(s_reservations_by_time).sort().map(time_section => <View key={time_section}>
+                {s_data.hasReservations && Object.keys(s_data.reservationsByTime).sort().map(time_section => <View key={time_section}>
                     <View style={reservation_styles.sectionHeaderView} >
                         <Text style={[global_styles.bodySubHeading, reservation_styles.timeText]}>{getTimeString(parse24HourTimeString(time_section), true)}</Text>
                         <View style={[global_styles.horizontalCenteringView, {marginRight:15}]}>
-                            <Text style={[global_styles.bodyText, reservation_styles.totalGuestsText]} >{c_reservation_by_time_total_guests[time_section]} TOTAL</Text>
+                            <Text style={[global_styles.bodyText, reservation_styles.totalGuestsText]} >{total_guests_by_time[time_section]} TOTAL</Text>
                             <Image style={[global_styles.iconButtonImage, reservation_styles.totalGuestsIconImage]} source={GroupIcon} />
                         </View>
                     </View>
                     <View style={reservation_styles.reservationView}>
-                        {s_reservations_by_time[time_section].map(reservation => <Reservation
+                        {s_data.reservationsByTime[time_section].map(reservation => <Reservation
                             item={reservation}
-                            getTagColor={tag_name => c_tag_colors[tag_name]}
+                            refreshViewer={refresh}
                             key={reservation._id} />)}
                     </View>
                 </View>)}
                 <View style={[global_styles.centeringView, reservation_styles.statusView]}>
-                    <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_is_fetching ? 'Fetching reservations...' : 'That' + '’' + 's all folks!'}</Text>
-                    {s_is_fetching && <ActivityIndicator color={appColors.main} size='large' />}
+                    <Text style={[global_styles.bodySubHeading, reservation_styles.statusText]}>{s_data.isFetching ? 'Fetching reservations...' : 'That' + '’' + 's all folks!'}</Text>
+                    {s_data.isFetching && <ActivityIndicator color={appColors.main} size='large' />}
                 </View>
             </ScrollView>
         </Animated.View>
