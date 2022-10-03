@@ -49,7 +49,6 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
 
     /** SIDE-EFFECTS */
     useEffect(fetchTimeOffRequests, [date]); //Fetch the time-off requests on initialization and whenever the date changes.
-    //useEffect(() => console.log(s_data));
 
     function fetchTimeOffRequests(){
         const url = s_config.env.API_URL + '/time-off-requests?date=' + formatISO(date, {representation:'date'});

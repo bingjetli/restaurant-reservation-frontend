@@ -34,6 +34,7 @@ export default function({route, navigation}){
 
         const payload = {...route.params};
         payload.endDate = formatISO(s_date, {representation:'date'});
+        payload.updatedAt = formatISO(new Date());
 
         Axios.put(url, payload, {headers:headers}).then(r => {
             if(r.data.result === 'successful'){

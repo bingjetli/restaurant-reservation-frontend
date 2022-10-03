@@ -15,7 +15,7 @@ import global_styles from './styles/global_styles';
 import reservation_styles from './styles/reservation_styles';
 import TagViewer from './TagViewer';
 import time_off_request_styles from './styles/time_off_request_styles';
-import { format, parseISO } from 'date-fns';
+import { format, formatISO, parseISO } from 'date-fns';
 import DoneIcon from '../assets/icons/done.png';
 
 export default function({item, refreshViewer}){
@@ -48,6 +48,7 @@ export default function({item, refreshViewer}){
         const payload = {
             id:item._id,
             status:status,
+            updatedAt:formatISO(new Date()),
         };
         const url = s_config.env.API_URL + '/time-off-requests';
 
@@ -224,29 +225,38 @@ export default function({item, refreshViewer}){
                 <Text style={[global_styles.bodyCaption, time_off_request_styles.itemDetailsText]}>&ldquo;{item.details}&rdquo;</Text>
             }
 
-            <View style={time_off_request_styles.itemFooterView}>
+            <View style={[global_styles.horizontalCenteringView, time_off_request_styles.itemFooterView]}>
+                <View>
+                    {
+                        s_status === 'approved' ? 
+                        <TouchableHighlight 
+                            style={reservation_styles.reservationFooterButton} 
+                            activeOpacity={0.6}
+                            underlayColor={appColors.content2}
+                            onPress={() => approveTimeOffRequest()} >
+                            <>
+                                <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={DoneIcon} />
+                                <Text style={[global_styles.secondaryButtonText, reservation_styles.presentButtonSelectedText]} >Approved</Text>
+                            </>
+                        </TouchableHighlight> :
+                        <TouchableHighlight 
+                            style={reservation_styles.reservationFooterButton} 
+                            activeOpacity={0.6}
+                            underlayColor={appColors.content2}
+                            onPress={() => approveTimeOffRequest()} >
+                            <>
+                                <Image style={global_styles.iconButtonImage} source={DoneIcon} />
+                                <Text style={[global_styles.secondaryButtonText]} >Approve</Text>
+                            </>
+                        </TouchableHighlight>
+                    }
+                </View>
                 {
-                    s_status === 'approved' ? 
-                    <TouchableHighlight 
-                        style={reservation_styles.reservationFooterButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={() => approveTimeOffRequest()} >
-                        <>
-                            <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={DoneIcon} />
-                            <Text style={[global_styles.secondaryButtonText, reservation_styles.presentButtonSelectedText]} >Approved</Text>
-                        </>
-                    </TouchableHighlight> :
-                    <TouchableHighlight 
-                        style={reservation_styles.reservationFooterButton} 
-                        activeOpacity={0.6}
-                        underlayColor={appColors.content2}
-                        onPress={() => approveTimeOffRequest()} >
-                        <>
-                            <Image style={global_styles.iconButtonImage} source={DoneIcon} />
-                            <Text style={[global_styles.secondaryButtonText]} >Approve</Text>
-                        </>
-                    </TouchableHighlight>
+                    item.hasOwnProperty('updatedAt') && 
+                    <View style={[{marginRight:10}]}>
+                        <Text style={[global_styles.bodyCaption, time_off_request_styles.itemUpdatedText]}>Last Updated: </Text>
+                        <Text style={[global_styles.bodyCaption, time_off_request_styles.itemUpdatedText]}>{format(parseISO(item.updatedAt), 'Pp')}</Text>
+                    </View>
                 }
             </View>
         </View>

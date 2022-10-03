@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { formatISO } from 'date-fns';
 import React, { useContext, useState } from 'react';
 import { Alert, Image, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +31,7 @@ export default function({route, navigation}){
 
         const payload = {...route.params.payload}
         payload.id = s_selected;
+        payload.updatedAt = formatISO(new Date());
 
         Axios.put(url, payload, {headers:headers}).then(r => {
             if(r.data.result === 'successful'){

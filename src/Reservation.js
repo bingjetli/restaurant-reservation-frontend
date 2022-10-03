@@ -14,6 +14,7 @@ import { appColors, getTimeString, parse24HourTimeString } from './common';
 import global_styles from './styles/global_styles';
 import reservation_styles from './styles/reservation_styles';
 import TagViewer from './TagViewer';
+import { format, formatISO, parseISO } from 'date-fns';
 
 export default function({item, refreshViewer}){
     const navigation = useNavigation(); //hook to retreive navigation prop from nested component
@@ -42,6 +43,7 @@ export default function({item, refreshViewer}){
         const payload = {
             id:item._id,
             status:status,
+            updatedAt:formatISO(new Date()),
         };
         const url = s_config.env.API_URL + '/reservations';
 
@@ -285,50 +287,61 @@ export default function({item, refreshViewer}){
             {item.notes && <Text style={[global_styles.bodyCaption, reservation_styles.reservationNotesText]} >&ldquo;{item.notes}&rdquo;</Text>}
         </View>
 
-        <View style={[global_styles.horizontalView, {justifyContent:'flex-start'}]}>
-            {s_status === 'present' ? 
-                <TouchableHighlight 
-                    style={reservation_styles.reservationFooterButton} 
-                    activeOpacity={0.6}
-                    underlayColor={appColors.content2}
-                    onPress={() => markStatusForReservation('present')} >
-                    <>
-                        <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={PersonFilledIcon} />
-                        <Text style={[global_styles.secondaryButtonText, reservation_styles.presentButtonSelectedText]} >Present</Text>
-                    </>
-                </TouchableHighlight> :
-                <TouchableHighlight 
-                    style={reservation_styles.reservationFooterButton} 
-                    activeOpacity={0.6}
-                    underlayColor={appColors.content2}
-                    onPress={() => markStatusForReservation('present')} >
-                    <>
-                        <Image style={global_styles.iconButtonImage} source={PersonIcon} />
-                        <Text style={[global_styles.secondaryButtonText]} >Present</Text>
-                    </>
-                </TouchableHighlight>}
+        <View style={[global_styles.horizontalView, {justifyContent:'space-between'}]}>
+            <View style={[global_styles.horizontalCenteringView]}>
+                {s_status === 'present' ? 
+                    <TouchableHighlight 
+                        style={reservation_styles.reservationFooterButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.content2}
+                        onPress={() => markStatusForReservation('present')} >
+                        <>
+                            <Image style={[global_styles.iconButtonImage, reservation_styles.presentButtonSelected]} source={PersonFilledIcon} />
+                            <Text style={[global_styles.secondaryButtonText, reservation_styles.presentButtonSelectedText]} >Present</Text>
+                        </>
+                    </TouchableHighlight> :
+                    <TouchableHighlight 
+                        style={reservation_styles.reservationFooterButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.content2}
+                        onPress={() => markStatusForReservation('present')} >
+                        <>
+                            <Image style={global_styles.iconButtonImage} source={PersonIcon} />
+                            <Text style={[global_styles.secondaryButtonText]} >Present</Text>
+                        </>
+                    </TouchableHighlight>}
 
-            {s_status === 'absent' ? 
-                <TouchableHighlight 
-                    style={reservation_styles.reservationFooterButton} 
-                    activeOpacity={0.6}
-                    underlayColor={appColors.content2}
-                    onPress={() => markStatusForReservation('absent')}>
-                    <>
-                        <Image style={[global_styles.iconButtonImage, reservation_styles.absentButtonSelected]} source={PersonOffFilledIcon} />
-                        <Text style={[global_styles.secondaryButtonText, reservation_styles.absentButtonSelectedText]} >Absent</Text>
-                    </>
-                </TouchableHighlight> :
-                <TouchableHighlight 
-                    style={reservation_styles.reservationFooterButton} 
-                    activeOpacity={0.6}
-                    underlayColor={appColors.content2}
-                    onPress={() => markStatusForReservation('absent')}>
-                    <>
-                        <Image style={global_styles.iconButtonImage} source={PersonOffIcon} />
-                        <Text style={global_styles.secondaryButtonText} >Absent</Text>
-                    </>
-                </TouchableHighlight>}
+                {s_status === 'absent' ? 
+                    <TouchableHighlight 
+                        style={reservation_styles.reservationFooterButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.content2}
+                        onPress={() => markStatusForReservation('absent')}>
+                        <>
+                            <Image style={[global_styles.iconButtonImage, reservation_styles.absentButtonSelected]} source={PersonOffFilledIcon} />
+                            <Text style={[global_styles.secondaryButtonText, reservation_styles.absentButtonSelectedText]} >Absent</Text>
+                        </>
+                    </TouchableHighlight> :
+                    <TouchableHighlight 
+                        style={reservation_styles.reservationFooterButton} 
+                        activeOpacity={0.6}
+                        underlayColor={appColors.content2}
+                        onPress={() => markStatusForReservation('absent')}>
+                        <>
+                            <Image style={global_styles.iconButtonImage} source={PersonOffIcon} />
+                            <Text style={global_styles.secondaryButtonText} >Absent</Text>
+                        </>
+                    </TouchableHighlight>}
+            </View>
+            
+            {
+                item.hasOwnProperty('updatedAt') && 
+                <View style={[{marginRight:10}]}>
+                    <Text style={[global_styles.bodyCaption, reservation_styles.reservationUpdatedText]}>Last Updated: </Text>
+                    <Text style={[global_styles.bodyCaption, reservation_styles.reservationUpdatedText]}>{format(parseISO(item.updatedAt), 'Pp')}</Text>
+                </View>
+            }
+
         </View>
     </View>);
 }

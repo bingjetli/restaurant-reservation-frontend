@@ -13,8 +13,6 @@ import TagViewer from '../../TagViewer';
 export default function({route, navigation}){
     const [s_config, setConfigState] = useContext(AppConfig);
 
-    console.log(route.params);
-
     //event-handlers
     function returnToHomeScreen(){
         navigation.popToTop();

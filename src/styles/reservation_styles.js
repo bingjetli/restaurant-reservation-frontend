@@ -91,4 +91,7 @@ export default StyleSheet.create({
     absentButtonSelectedText:{
         color:appColors.warning,
     },
+    reservationUpdatedText:{
+        color:appColors.text4,
+    },
 });

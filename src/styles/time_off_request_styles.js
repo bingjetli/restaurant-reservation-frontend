@@ -43,6 +43,9 @@ export default StyleSheet.create({
         marginTop:10,
     },
     itemFooterView:{
-        flexDirection:'row',
+        justifyContent:'space-between',
     },
+    itemUpdatedText:{
+        color:appColors.text4,
+    }
 });

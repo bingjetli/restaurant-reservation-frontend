@@ -7,6 +7,7 @@ import Axios from 'axios';
 import AppConfig from '../../AppConfig';
 import global_styles from '../../styles/global_styles';
 import setup_styles from '../../styles/setup_styles';
+import { formatISO } from 'date-fns';
 
 
 export default function({route, navigation}){
@@ -29,6 +30,7 @@ export default function({route, navigation}){
 
         const payload = {...route.params};
         payload.details = s_details.trim();
+        payload.updatedAt = formatISO(new Date());
 
         Axios.put(url, payload, {headers:headers}).then(r => {
             if(r.data.result === 'successful'){
