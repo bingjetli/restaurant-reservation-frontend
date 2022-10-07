@@ -59,7 +59,9 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
         //abort_controller = new AbortController();
         Axios.get(url, {headers:headers}).then(r => {
             if(r.data.result === 'not_found'){
-                setDataState({...s_data}.isFetching = false);
+                const data_copy = {...s_data};
+                data_copy.isFetching = false;
+                setDataState(data_copy);
             }
             else if(r.data.result === 'successful'){
                 const data_copy = {...s_data};
@@ -71,7 +73,7 @@ export default function({date, onSwipeLeft, onSwipeRight, onPress}){
                 Alert.alert('Error Occured!', r.data.message, [{'text':'OK'}]);
             }
         }).catch(e => {
-            if(e.message !== 'canceled') Alert.alert('Error Occured!', `An error occured while fetching data for the time-off request viewer.`, [{'text':'OK'}]);
+            if(e.message !== 'canceled') Alert.alert('Error Occured!', `An error occured while fetching data for the time-off request viewer. \n${e.message}`, [{'text':'OK'}]);
         });
     }
 

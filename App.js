@@ -312,8 +312,9 @@ function HomeTabs(){
       minHeight:50,
       backgroundColor:appColors.content,
     },
+    tabBarLabelPosition:'below-icon',
   }) }>
-    <BottomTab.Screen name='time-off' component={TimeOffRequests} />
     <BottomTab.Screen name='reservations' component={Reservations} />
+    <BottomTab.Screen name='time-off' component={TimeOffRequests} />
   </BottomTab.Navigator>);
 }
