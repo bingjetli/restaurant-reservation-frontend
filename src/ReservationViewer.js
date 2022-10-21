@@ -11,7 +11,11 @@ import Reservation from './Reservation';
 import global_styles from './styles/global_styles';
 import reservation_styles from './styles/reservation_styles';
 
-let abort_controller; //this variable is accessible from every other instance of this component, luckily there should only be one of these active at any moment.
+/** This variable can be accessed from every other instance
+ * of this component, luckily there should only be one of 
+ * these active at any moment.
+ */
+let abort_controller;
 
 export default function({date, onSwipeLeft, onSwipeRight, onPress}){
     const [s_config, setConfigState] = useContext(AppConfig);

@@ -1,7 +1,7 @@
 {
   "expo": {
     "owner": "roboticjackdaw113",
-    "name": "Vu Restaurant Reservation Client",
+    "name": "Vu Reservations",
     "slug": "vu-reservation-frontend-app-expo",
     "version": "1.0.0",
     "jsEngine": "hermes",
