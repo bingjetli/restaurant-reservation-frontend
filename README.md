@@ -16,4 +16,4 @@ This design of this application was inspired by Apple's Human Interface Guidelin
 - Allows time-off requests to be made by employees in a separate tab to be reviewed by management.
 
 # Video Demo
-TODO: insert video demonstration link
+[![Link to the video demo](https://i.imgur.com/UoAe2A4.png)](https://www.youtube.com/embed/Mt7cvHH8WHk)
